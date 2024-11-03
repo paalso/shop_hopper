@@ -14,6 +14,7 @@ shop-hopper = "shop_hopper.scripts.app:main"
 python = "^3.11"
 pyyaml = "^6.0.2"
 requests = "^2.32.3"
+beautifulsoup4 = "^4.12.3"
 
 
 [tool.poetry.group.dev.dependencies]
