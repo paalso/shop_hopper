@@ -7,7 +7,7 @@ readme = "README.md"
 
 
 [tool.poetry.scripts]
-shop-hopper = "shop_hopper.scripts.shop_hopper:main"
+shop-hopper = "shop_hopper.scripts.app:main"
 
 
 [tool.poetry.dependencies]

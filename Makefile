@@ -19,6 +19,6 @@ build: check
 	poetry build
 
 run:
-	poetry run python3 -m shop_hopper.scripts.shop_hopper
+	poetry run python3 -m shop_hopper.scripts.app
 
 .PHONY: install test lint selfcheck check build
