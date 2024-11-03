@@ -1,26 +1,30 @@
-import yaml
 from  shop_hopper.query_generators import query_generators
+from  shop_hopper.parsers import parsers
+import requests
+
+DEFAULT_PLATFORMS = 'alib', 'newauction', 'olx'
 
 
 class ShopHopper:
-    def __init__(self, settings_path='shop_hopper/config/platforms.yaml'):
-        self.settings = self.__class__._load_settings(settings_path)
+    def __init__(self, platforms=DEFAULT_PLATFORMS):
+        self.platforms = platforms
 
     def search(self, request):
-        for setting in self.settings:
-            platform = setting['platform']
-            parser = setting['parser']
-            print(platform, parser)
-            http_request = self.__class__._generate_query(platform, request)
-            print(http_request)
+        for platform in self.platforms:
+
+            query_generator = query_generators.get(platform)
+            if not query_generator:
+                print(f"Warning: No query generator found for {platform}.")
+                continue
+
+            query_url = query_generator(request)
+            print(f"Searching in {platform}: {query_url}")
+
+            print(query_url)
             print()
+
         return 'Oops!'
 
-    @staticmethod
-    def _load_settings(filepath):
-        with open(filepath, 'r') as f:
-            settings = yaml.safe_load(f)
-        return settings
 
     @staticmethod
     def _generate_query(platform, request):
