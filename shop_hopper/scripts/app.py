@@ -1,5 +1,6 @@
 import argparse
 import os
+from shop_hopper.shop_hopper import ShopHopper
 
 
 def parse_args():
@@ -24,11 +25,14 @@ def parse_args():
 
 def main():
     print("Hello! It's Shop Hopper")
+
     args = parse_args()
     request = args.request
     output_dir = args.output_dir
-    print(f'request: {request}')
-    print(f'output dir: {output_dir}')
+
+    shop_hopper = ShopHopper()
+    report = shop_hopper.search(request)
+    print(report)
 
 
 if __name__ == '__main__':

@@ -1,7 +1,8 @@
 - platform: alib
-  request_template: "https://alib.top/find3.php?tfind={query}"
   parser: "parse_alib_page"
 
 - platform: newauction
-  request_template: "https://newauction.org/listing/offer/search_{query}"
   parser: "parse_newauction_page"
+
+- platform: olx
+  parser: "parse_olx_page"
