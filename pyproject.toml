@@ -5,6 +5,11 @@ description = "Script for finding desired products across multiple marketplaces 
 authors = ["Pavel Soroka <40a.pvl@gmail.com>"]
 readme = "README.md"
 
+
+[tool.poetry.scripts]
+shop-hopper = "shop_hopper.scripts.shop_hopper:main"
+
+
 [tool.poetry.dependencies]
 python = "^3.11"
 

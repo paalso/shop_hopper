@@ -18,4 +18,7 @@ check: selfcheck test lint
 build: check
 	poetry build
 
+run:
+	poetry run python3 -m shop_hopper.scripts.shop_hopper
+
 .PHONY: install test lint selfcheck check build
