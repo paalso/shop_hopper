@@ -1,10 +1,12 @@
-# not developed yet
+from bs4 import BeautifulSoup
+
+
 def _alib_parser(query):
     pass
 
 
 def _newauction_parser(query):
-    pass
+    "public_offer_snippet_container"
 
 
 def _olx_parser(query):
