@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "shop-hopper"
+version = "0.1.0"
+description = "Script for finding desired products across multiple marketplaces to compare availability and prices"
+authors = ["Pavel Soroka <40a.pvl@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
