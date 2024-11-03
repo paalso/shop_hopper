@@ -1,6 +1,5 @@
-from  shop_hopper.query_generators import query_generators
-from  shop_hopper.parsers import parsers
-import requests
+from shop_hopper.query_generators import query_generators
+from shop_hopper.parsers import parsers
 
 DEFAULT_PLATFORMS = 'alib', 'newauction', 'olx'
 
@@ -23,9 +22,8 @@ class ShopHopper:
             print(query_url)
             print()
 
+            parser = parsers.get(platform)
+            if not parser:
+                print(f"Warning: No parser found for {platform}.")
+                continue
         return 'Oops!'
-
-
-    @staticmethod
-    def _generate_query(platform, request):
-        return query_generators[platform](request)
