@@ -28,6 +28,7 @@ def main():
 
     args = parse_args()
     request = args.request
+    output_dir = args.output_dir
 
     shop_hopper = ShopHopper()
     report = shop_hopper.search(request)
