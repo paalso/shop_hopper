@@ -1,8 +1,0 @@
-- platform: alib
-  parser: "parse_alib_page"
-
-- platform: newauction
-  parser: "parse_newauction_page"
-
-- platform: olx
-  parser: "parse_olx_page"

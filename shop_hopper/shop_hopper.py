@@ -3,6 +3,8 @@ from shop_hopper.query_generators import query_generators
 from shop_hopper.parsers import parsers
 
 DEFAULT_PLATFORMS = 'alib', 'newauction', 'olx'
+DEFAULT_PLATFORMS = 'newauction',
+DEFAULT_PLATFORMS = ('alib',)
 
 
 class ShopHopper:
@@ -25,6 +27,10 @@ class ShopHopper:
                 continue
 
             response = requests.get(query_url)
+            print(response.text)
+            print(f'response: {response}')
+            print(f'response.text: {response.text}')
+            # print(f'response: {response}')
             if response.ok:
                 response_content = response.text
                 parse_result = parser(response_content)
