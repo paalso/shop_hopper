@@ -1,6 +1,8 @@
 import argparse
 import os
+from shop_hopper.logger import Logger
 from shop_hopper.shop_hopper import ShopHopper
+from shop_hopper.savers import JSONSaver
 
 
 def parse_args():
@@ -24,14 +26,17 @@ def parse_args():
 
 
 def main():
-    print("Hello! It's Shop Hopper")
-
     args = parse_args()
     request = args.request
+    output_dir = args.output_dir
 
-    shop_hopper = ShopHopper()
+    logger = Logger().get_logger()
+    shop_hopper = ShopHopper(logger)
+
     report = shop_hopper.search(request)
-    print(report)
+    savers = [JSONSaver()]
+    for saver in savers:
+        saver.save(report, request, logger, output_dir)
 
 
 if __name__ == '__main__':
