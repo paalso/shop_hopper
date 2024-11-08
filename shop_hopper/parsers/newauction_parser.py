@@ -1,12 +1,7 @@
-from bs4 import BeautifulSoup
-from urllib.parse import urlparse
+from shop_hopper.parsers.base_parser import BaseParser
 
 
-class NewauctionParser:
-    def __init__(self, html, query):
-        self.base_url = self._get_base_url(query)
-        self.soup = BeautifulSoup(html, 'html.parser')
-
+class NewauctionParser(BaseParser):
     def parse(self):
         offers = self.soup.find_all('div', class_='offer_snippet--body')
 
@@ -33,11 +28,6 @@ class NewauctionParser:
             'name': 'NewAuction',
             'url': 'https://newauction.org/'
         }
-
-    def _get_base_url(self, query):
-        parsed_url = urlparse(query)
-        base_url = f'{parsed_url.scheme}://{parsed_url.netloc}'
-        return base_url
 
     def _get_title(self, item):
         return self._get_name_and_url(item, '.offer_snippet_body_top--title')
