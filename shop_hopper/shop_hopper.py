@@ -3,8 +3,7 @@ from shop_hopper.logger import Logger
 from shop_hopper.query_generators import query_generators
 from shop_hopper.parsers.parsers import parsers
 
-# DEFAULT_PLATFORMS = 'alib', 'newauction', 'olx'
-DEFAULT_PLATFORMS = 'newauction',
+DEFAULT_PLATFORMS = 'newauction', 'olx'
 
 
 class ShopHopper:
@@ -13,7 +12,7 @@ class ShopHopper:
         self.logger = Logger().get_logger()
 
     def search(self, request):
-        result = []
+        search_result = []
 
         for platform in self.platforms:
             query_generator = query_generators.get(platform)
@@ -33,10 +32,9 @@ class ShopHopper:
             if response.ok:
                 response_text = response.text
                 parse_result = parser_class(response_text, query_url).parse()
-                # print(parse_result)
-                result.extend(parse_result)
+                search_result.extend(parse_result)
             else:
                 self.logger.debug(f"response: {response}")
                 self.logger.debug(f"response.headers: {response.headers}")
 
-        return result
+        return search_result
