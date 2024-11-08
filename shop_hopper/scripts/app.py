@@ -2,7 +2,7 @@ import argparse
 import os
 from shop_hopper.logger import Logger
 from shop_hopper.shop_hopper import ShopHopper
-from shop_hopper.savers import JSONSaver
+from shop_hopper.savers import HTMLSaver
 
 
 def parse_args():
@@ -34,7 +34,7 @@ def main():
     shop_hopper = ShopHopper(logger)
 
     report = shop_hopper.search(request)
-    savers = [JSONSaver()]
+    savers = [HTMLSaver()]
     for saver in savers:
         saver.save(report, request, logger, output_dir)
 

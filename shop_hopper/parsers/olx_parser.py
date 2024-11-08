@@ -50,5 +50,5 @@ class OlxParser(BaseParser):
     @staticmethod
     def _get_price(item):
         price_element = item.select_one("p", attrs={"data-testid": "ad-price"})
-        price = price_element.getText().split()[0]
+        price = ''.join(price_element.getText().split()[:-1])
         return price
