@@ -2,25 +2,10 @@ from shop_hopper.parsers.base_parser import BaseParser
 
 
 class NewauctionParser(BaseParser):
-    def parse(self):
-        offers = self.soup.find_all('div', class_='offer_snippet--body')
+    OFFER_SELECTOR = 'offer_snippet--body'
 
-        results = []
-
-        for offer in offers:
-            platform = self.__class__._get_platform()
-            title = self._get_title(offer)
-            price = self.__class__._get_price(offer)
-            seller = self._get_seller(offer)
-
-            results.append({
-                'platform': platform,
-                'title': title,
-                'price': price,
-                'seller': seller,
-            })
-
-        return results
+    def _get_offers(self):
+        return self.soup.find_all('div', class_=self.OFFER_SELECTOR)
 
     @staticmethod
     def _get_platform():

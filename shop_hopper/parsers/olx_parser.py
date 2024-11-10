@@ -2,26 +2,18 @@ from shop_hopper.parsers.base_parser import BaseParser
 
 
 class OlxParser(BaseParser):
+    NO_OFFERS_MESSAGE = "Ми знайшли  0 оголошень"
+    OFFER_SELECTOR = {"data-cy": "l-card", "data-testid": "l-card"}
+
     def parse(self):
-        offers = self.soup.find_all(
-            "div", attrs={"data-cy": "l-card", "data-testid": "l-card"})
+        if self.NO_OFFERS_MESSAGE in self.soup.text:
+            return []
 
-        results = []
+        return super().parse()
 
-        for offer in offers:
-            platform = self.__class__._get_platform()
-            title = self._get_title(offer)
-            price = self.__class__._get_price(offer)
-            seller = self._get_seller(offer)
-
-            results.append({
-                'platform': platform,
-                'title': title,
-                'price': price,
-                'seller': seller,
-            })
-
-        return results
+    def _get_offers(self):
+        return self.soup.find_all(
+            "div", attrs=self.OFFER_SELECTOR)
 
     @staticmethod
     def _get_platform():
