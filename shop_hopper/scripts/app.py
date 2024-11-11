@@ -1,39 +1,29 @@
-import argparse
-import os
+from shop_hopper.args_parser import ArgParser
 from shop_hopper.logger import Logger
 from shop_hopper.shop_hopper import ShopHopper
 from shop_hopper.savers import HTMLSaver
 
 
-def parse_args():
-    parser = argparse.ArgumentParser(
-        description='Search for products across multiple platforms.')
-
-    parser.add_argument(
-        'request',
-        type=str,
-        help='Keywords for the search request.')
-
-    parser.add_argument(
-        '-o', '--output_dir',
-        type=str,
-        default=os.getcwd(),
-        help='Directory to save the report. Defaults to the current directory.'
-    )
-
-    args = parser.parse_args()
-    return args
-
-
 def main():
-    args = parse_args()
+    """
+    Main entry point for the script. Handles the search process
+    and saving the results.
+
+    Steps:
+        1. Parses the arguments
+        2. Creates a logger instance
+        3. Initializes the ShopHopper to perform the search
+        4. Saves the search results to the specified directory.
+    """
+    arg_parser = ArgParser()
+    args = arg_parser.parse()
     request = args.request
     output_dir = args.output_dir
 
     logger = Logger().get_logger()
     shop_hopper = ShopHopper(logger)
-
     report = shop_hopper.search(request)
+
     savers = [HTMLSaver()]
     for saver in savers:
         saver.save(report, request, logger, output_dir)
