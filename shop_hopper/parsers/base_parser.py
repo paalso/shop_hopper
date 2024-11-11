@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from bs4 import BeautifulSoup
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urljoin
 
 
 class BaseParser:
@@ -11,9 +11,14 @@ class BaseParser:
     and list of offers according to the specific structure of each platform.
     """
     def __init__(self, html, query):
-        # Extracts the base URL from the query URL
+        """
+        Initializes the parser with HTML content and the search query URL.
+
+        Args:
+            html (str): HTML content of the page.
+            query (str): Search query URL used to determine the base URL.
+        """
         self.base_url = self.__class__._get_base_url(query)
-        # Initializes BeautifulSoup for parsing HTML content
         self.soup = BeautifulSoup(html, 'html.parser')
 
     def parse(self):
@@ -39,8 +44,12 @@ class BaseParser:
     @abstractmethod
     def _get_offers(self):
         """
+        Extracts offer elements from the HTML content.
+
         Should be implemented in the subclass.
-        Returns a list of offer elements from the HTML content.
+
+        Returns:
+            list: A list of HTML elements representing product offers.
         """
         pass
 
@@ -48,32 +57,57 @@ class BaseParser:
     @abstractmethod
     def _get_platform():
         """
+        Returns the platform name.
+
         Should be implemented in the subclass.
-        Returns the platform name and base url
+
+        Returns:
+            str: The name of the platform.
         """
         pass
 
     @abstractmethod
     def _get_title(self, offer):
         """
-        Should be implemented in the subclass.
         Extracts the title of the offer.
+
+        Should be implemented in the subclass.
+
+        Args:
+            offer (element.Tag): HTML element representing the product offer.
+
+        Returns:
+            str: The product title.
         """
         pass
 
     @abstractmethod
     def _get_price(self, offer):
         """
-        Should be implemented in the subclass.
         Extracts the price of the offer.
+
+        Should be implemented in the subclass.
+
+        Args:
+            offer (element.Tag): HTML element representing the product offer.
+
+        Returns:
+            str: The product price.
         """
         pass
 
     @abstractmethod
     def _get_seller(self, offer):
         """
-        Should be implemented in the subclass.
         Extracts the seller information from the offer.
+
+        Should be implemented in the subclass.
+
+        Args:
+            offer (element.Tag): HTML element representing the product offer.
+
+        Returns:
+            str: The seller name.
         """
         pass
 
@@ -81,8 +115,51 @@ class BaseParser:
     def _get_base_url(query):
         """
         Extracts the base URL (scheme + domain) from a full query URL.
+
         For example:
         'https://example.com/search?q=item' -> 'https://example.com'.
+
+        Args:
+            query (str): The full query URL.
+
+        Returns:
+            str: The base URL of the platform.
         """
         parsed_url = urlparse(query)
         return f'{parsed_url.scheme}://{parsed_url.netloc}'
+
+    def _get_full_url(self, partial_url):
+        """
+        Constructs a full URL from a partial URL using the base URL.
+
+        Args:
+            partial_url (str): The relative or partial URL.
+
+        Returns:
+            str: The complete URL.
+        """
+        return urljoin(self.base_url, partial_url)
+
+    def _get_name_and_url(self, item, selector):
+        """
+        Extracts the name and URL of an element based on a CSS selector.
+
+        Args:
+            item (element.Tag): The HTML element to search within.
+            selector (str): The CSS selector for extracting the element.
+
+        Returns:
+            dict: A dictionary containing 'name' and 'url' keys.
+        """
+        element = item.select_one(selector)
+        if not element:
+            return {'name': None, 'url': None}
+
+        name = element.getText().strip()
+        href = element.get('href')
+        url = self._get_full_url(href) if href else None
+
+        return {
+            'name': name,
+            'url': url
+        }

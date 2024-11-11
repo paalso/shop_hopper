@@ -2,8 +2,8 @@ from shop_hopper.parsers.base_parser import BaseParser
 
 
 class OlxParser(BaseParser):
-    NO_OFFERS_MESSAGE = "Ми знайшли  0 оголошень"
-    OFFER_SELECTOR = {"data-cy": "l-card", "data-testid": "l-card"}
+    NO_OFFERS_MESSAGE = 'Ми знайшли  0 оголошень'
+    OFFER_SELECTOR = {'data-cy': 'l-card', 'data-testid': 'l-card'}
 
     def parse(self):
         if self.NO_OFFERS_MESSAGE in self.soup.text:
@@ -13,7 +13,7 @@ class OlxParser(BaseParser):
 
     def _get_offers(self):
         return self.soup.find_all(
-            "div", attrs=self.OFFER_SELECTOR)
+            'div', attrs=self.OFFER_SELECTOR)
 
     @staticmethod
     def _get_platform():
@@ -23,13 +23,7 @@ class OlxParser(BaseParser):
         }
 
     def _get_title(self, item):
-        title_name = item.select_one('h6').getText()
-        title_href = item.find('a').get('href')
-        title_url = f'{self.base_url}{title_href}' if title_href else None
-        return {
-            'name': title_name,
-            'url': title_url
-        }
+        return self._get_name_and_url(item, 'h6')
 
     # TODO: Unable to retrieve seller info from the search result page.
     #       We can follow the title_url to get the seller's details.
@@ -41,6 +35,6 @@ class OlxParser(BaseParser):
 
     @staticmethod
     def _get_price(item):
-        price_element = item.select_one("p", attrs={"data-testid": "ad-price"})
+        price_element = item.select_one('p', attrs={'data-testid': 'ad-price'})
         price = ''.join(price_element.getText().split()[:-1])
         return price
