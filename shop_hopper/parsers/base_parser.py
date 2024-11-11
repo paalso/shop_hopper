@@ -73,9 +73,6 @@ class BaseParser:
 
         Should be implemented in the subclass.
 
-        Args:
-            offer (element.Tag): HTML element representing the product offer.
-
         Returns:
             str: The product title.
         """
@@ -87,9 +84,6 @@ class BaseParser:
         Extracts the price of the offer.
 
         Should be implemented in the subclass.
-
-        Args:
-            offer (element.Tag): HTML element representing the product offer.
 
         Returns:
             str: The product price.
@@ -103,13 +97,23 @@ class BaseParser:
 
         Should be implemented in the subclass.
 
-        Args:
-            offer (element.Tag): HTML element representing the product offer.
-
         Returns:
             str: The seller name.
         """
         pass
+
+    def _get_picture(self, offer):
+        """
+        Extracts the picture information from the offer.
+
+        Might be implemented in the subclass.
+
+        Returns:
+            str: The seller name.
+        """
+        return {
+
+        }
 
     @staticmethod
     def _get_base_url(query):
