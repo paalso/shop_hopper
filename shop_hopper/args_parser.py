@@ -23,6 +23,12 @@ class ArgParser:
                  'Defaults to the current directory.'
         )
 
+        self.parser.add_argument(
+            '-j', '--json',
+            action='store_true',
+            help='If set, saves the report in JSON format.'
+        )
+
     def parse(self):
         """
         Parses the command line arguments.
