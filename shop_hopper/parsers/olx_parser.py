@@ -43,3 +43,16 @@ class OlxParser(BaseParser):
         price_element = item.select_one('p', attrs={'data-testid': 'ad-price'})
         price = ''.join(price_element.getText().split()[:-1])
         return price
+
+    def _get_image(self, offer):
+        img_element = offer.select_one('img')
+
+        img_url = img_element.get('src')
+
+        if "no_thumbnail" in img_url:
+            srcset = img_element.get('srcset')
+            if srcset:
+                img_url = srcset.split(",")[0].split()[0]
+
+        print(f"Получен URL изображения: {img_url}")
+        return img_url

@@ -18,6 +18,7 @@
         border: 1px solid #ddd;
         padding: 8px;
         text-align: left;
+        vertical-align: middle;
       }
       th {
         background-color: #f2f2f2;
@@ -27,6 +28,14 @@
       }
       .price {
         text-align: right;
+      }
+      .image {
+          text-align: center;
+      }
+      .image img {
+          max-width: 150px;
+          height: auto;
+          display: inline-block;
       }
     </style>
   </head>
@@ -39,6 +48,7 @@
             <th>Платформа</th>
             <th>Лот</th>
             <th>Цена, грн.</th>
+            <th>Изображение</th>
             <th>Продавец</th>
           </tr>
         </thead>
@@ -54,6 +64,7 @@
               <a href="{{ item.title.url }}" target="_blank">{{ item.title.name }}</a>
             </td>
             <td class="price">{{ item.price }}</td>
+            <td class="image"><img src="{{ item.img_url }}"></td>
             <td>
               <a href="{{ item.seller.url }}" target="_blank"
                 >{{ item.seller.name }}</a

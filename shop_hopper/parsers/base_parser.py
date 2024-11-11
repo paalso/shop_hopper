@@ -36,6 +36,7 @@ class BaseParser:
                 'platform': self._get_platform(),
                 'title': self._get_title(offer),
                 'price': self._get_price(offer),
+                'img_url': self._get_image(offer),
                 'seller': self._get_seller(offer),
             }
             for offer in offers
@@ -102,7 +103,7 @@ class BaseParser:
         """
         pass
 
-    def _get_picture(self, offer):
+    def _get_image(self, offer):
         """
         Extracts the picture information from the offer.
 
@@ -111,9 +112,7 @@ class BaseParser:
         Returns:
             str: The seller name.
         """
-        return {
-
-        }
+        return
 
     @staticmethod
     def _get_base_url(query):
