@@ -8,7 +8,7 @@ query_generators = {
         f'https://newauction.org/listing/offer/search_'
         f'{urllib.parse.quote_plus(request)}',
     'olx': lambda request:
-        f'https://www.olx.ua/uk/list/q-{urllib.parse.quote_plus(request)}/'
+        f'https://www.olx.ua/uk/list/q-{request.replace(" ", "-")}/'
 }
 
 
