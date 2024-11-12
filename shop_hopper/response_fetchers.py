@@ -1,3 +1,5 @@
+from http.client import responses
+
 import requests
 import urllib.parse
 from urllib.parse import quote
@@ -15,10 +17,12 @@ _ALIB_REQUEST_HEADERS = {
 }
 
 
-def _encode_alib_query(query: str) -> str:
-    encoded_query = query.encode('windows-1251')
+def _encode_alib_query(request: str) -> str:
+    encoded_query = request.encode('windows-1251')
     url_encoded_query = quote(encoded_query)
-    return url_encoded_query.replace('%20', '+')
+    url_encoded_query = url_encoded_query.replace('%20', '+')
+    url = f'https://alib.top/find3.php?tfind={url_encoded_query}'
+    return url
 
 
 _query_url_builders = {
@@ -38,6 +42,10 @@ def fetch_platform_response(platform: str, query: str):
         raise ValueError(f"Unsupported platform: {platform}")
 
     query_url = query_url_builder(query)
+
     headers = _ALIB_REQUEST_HEADERS if platform == 'alib' else {}
 
-    return requests.get(query_url, headers=headers)
+    response = requests.get(query_url, headers=headers)
+    response.encoding = 'windows-1251' if platform == 'alib' else None
+
+    return response
