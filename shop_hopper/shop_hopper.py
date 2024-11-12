@@ -4,8 +4,8 @@ from shop_hopper.parsers.parsers import parsers
 
 # Default list of platforms to search on if none are specified.
 # DEFAULT_PLATFORMS = 'newauction', 'olx'
-# DEFAULT_PLATFORMS = 'alib',
-DEFAULT_PLATFORMS = 'newauction',
+DEFAULT_PLATFORMS = 'alib',
+# DEFAULT_PLATFORMS = 'newauction',
 DEFAULT_TIMEOUT = 10
 
 
@@ -50,6 +50,7 @@ class ShopHopper:
             self.logger.info(f'Searching in {platform}')
             try:
                 response = fetch_platform_response(platform, request)
+
                 if not response.ok:
                     self.logger.error(
                         f'Error occurred while fetching from {platform}: '

@@ -18,6 +18,7 @@ class BaseParser:
             html (str): HTML content of the page.
             query (str): Search query URL used to determine the base URL.
         """
+        self.query = query
         self.base_url = self.__class__._get_base_url(query)
         self.soup = BeautifulSoup(html, 'html.parser')
 
