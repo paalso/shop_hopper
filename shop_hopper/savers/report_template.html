@@ -66,9 +66,11 @@
             <td class="price">{{ item.price }}</td>
             <td class="image"><img src="{{ item.img_url }}"></td>
             <td>
-              <a href="{{ item.seller.url }}" target="_blank"
-                >{{ item.seller.name }}</a
-              >
+              {% if item.seller.url %}
+                <a href="{{ item.seller.url }}" target="_blank">{{ item.seller.name }}</a>
+              {% else %}
+                {{ item.seller.name }}
+              {% endif %}
             </td>
           </tr>
           {% endfor %}
