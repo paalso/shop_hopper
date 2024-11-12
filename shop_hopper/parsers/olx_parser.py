@@ -49,10 +49,10 @@ class OlxParser(BaseParser):
 
         img_url = img_element.get('src')
 
-        if "no_thumbnail" in img_url:
-            srcset = img_element.get('srcset')
-            if srcset:
-                img_url = srcset.split(",")[0].split()[0]
-
-        print(f"Получен URL изображения: {img_url}")
+        # if "no_thumbnail" in img_url:
+        #     srcset = img_element.get('srcset')
+        #     if srcset:
+        #         img_url = srcset.split(",")[0].split()[0]
+        #
+        # print(f"Получен URL изображения: {img_url}")
         return img_url
