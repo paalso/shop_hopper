@@ -1,9 +1,11 @@
 import requests
-from shop_hopper.query_generators import query_generators
+from shop_hopper.response_fetchers import fetch_platform_response
 from shop_hopper.parsers.parsers import parsers
 
 # Default list of platforms to search on if none are specified.
-DEFAULT_PLATFORMS = 'newauction', 'olx'
+# DEFAULT_PLATFORMS = 'newauction', 'olx'
+# DEFAULT_PLATFORMS = 'alib',
+DEFAULT_PLATFORMS = 'newauction',
 DEFAULT_TIMEOUT = 10
 
 
@@ -40,53 +42,32 @@ class ShopHopper:
         result = []
 
         for platform in self.platforms:
-            query_generator, parser_class = (
-                self._get_query_and_parser(platform))
-            if not query_generator or not parser_class:
+            parser_class = parsers.get(platform)
+            if not parser_class:
+                self.logger.warning(f'No parser found for {platform}')
                 continue
 
-            query_url = query_generator(request)
-            self.logger.info(f'Searching in {platform}: {query_url}')
-
+            self.logger.info(f'Searching in {platform}')
             try:
-                response = requests.get(query_url, timeout=DEFAULT_TIMEOUT)
-
+                response = fetch_platform_response(platform, request)
                 if not response.ok:
                     self.logger.error(
-                        f'Error occurred while fetching {query_url}: '
-                        f'{response.status_code} - {response.text}')
+                        f'Error occurred while fetching from {platform}: '
+                        f'{response.status_code} - {response.text}'
+                    )
                     continue
 
-                parse_result = parser_class(response.text, query_url).parse()
+                parse_result = (
+                    parser_class(response.text, response.url).parse())
                 result.extend(parse_result)
                 self.logger.info(
-                    f'Parsed {len(parse_result)} offers from {platform}')
+                    f'Parsed {len(parse_result)} offers from {platform}'
+                )
 
             except requests.exceptions.RequestException as e:
                 self.logger.error(
-                    f'Request failed for {platform} ({query_url}): {e}')
+                    f'Request failed for {platform}: {e}'
+                )
                 continue
+
         return result
-
-    def _get_query_and_parser(self, platform):
-        """
-        Retrieves the query generator and parser class for a given platform.
-
-        Args:
-            platform (str): The platform name.
-
-        Returns:
-            tuple: A tuple containing the query generator and parser.
-                   Returns (None, None) if either is missing.
-        """
-        query_generator = query_generators.get(platform)
-        if not query_generator:
-            self.logger.warning(f'No query generator found for {platform}')
-            return None, None
-
-        parser_class = parsers.get(platform)
-        if not parser_class:
-            self.logger.warning(f'No parser found for {platform}')
-            return None, None
-
-        return query_generator, parser_class
