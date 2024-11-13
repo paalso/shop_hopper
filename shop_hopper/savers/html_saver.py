@@ -6,8 +6,8 @@ from shop_hopper.savers.saver import Saver
 
 class HTMLSaver(Saver):
     def __init__(self):
-        template_dir = os.path.dirname(__file__)
-        self.env = Environment(loader=FileSystemLoader(template_dir))
+        templates_dir = self.__class__._get_templates_dir()
+        self.env = Environment(loader=FileSystemLoader(templates_dir))
         self.template = self.env.get_template('report_template.html')
 
     def save(self, data, query, logger, output_dir='.'):
@@ -21,3 +21,9 @@ class HTMLSaver(Saver):
             f.write(html_content)
 
         logger.info(f'Data saved to {full_filename}')
+
+    @staticmethod
+    def _get_templates_dir():
+        base_dir = os.path.dirname(os.path.dirname(__file__))
+        templates_dir = os.path.join(base_dir, 'templates')
+        return templates_dir
