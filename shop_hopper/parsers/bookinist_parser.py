@@ -29,6 +29,11 @@ class BookinistParser(BaseParser):
     def _get_seller(self, item):
         return self._get_name_and_url(item, '.fleft>.info-sel a')
 
+    def _get_image(self, item):
+        image_element = item.select_one('.left-img>.imageOfBook>a>img')
+        image_src = image_element.get('src')
+        return self._get_full_url(image_src) if image_src else None
+
     @staticmethod
     def _get_price(item):
         price_element = item.select_one('.fleft>.info-sel p:nth-of-type(2)')
