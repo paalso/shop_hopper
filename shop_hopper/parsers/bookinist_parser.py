@@ -1,4 +1,4 @@
-import rex
+import re
 from shop_hopper.parsers.base_parser import BaseParser
 
 

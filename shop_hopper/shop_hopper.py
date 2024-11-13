@@ -1,11 +1,8 @@
 import requests
 from shop_hopper.response_fetchers.response_fetcher import get_response_fetcher
 from shop_hopper.parsers.parsers import parsers
+from shop_hopper.config.constants import VALID_PLATFORMS
 
-# Default list of platforms to search on if none are specified.
-DEFAULT_PLATFORMS = 'newauction', 'olx', 'alib'
-# DEFAULT_PLATFORMS = 'alib',
-# DEFAULT_PLATFORMS = 'newauction',
 DEFAULT_TIMEOUT = 10
 
 
@@ -16,7 +13,7 @@ class ShopHopper:
     to extract product data.
     """
 
-    def __init__(self, logger, platforms=DEFAULT_PLATFORMS):
+    def __init__(self, logger, platforms=VALID_PLATFORMS):
         """
         Initializes the ShopHopper instance.
 
