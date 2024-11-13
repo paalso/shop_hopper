@@ -49,7 +49,7 @@ class AlibParser(BaseParser):
         return regex.search(item.text).group(1)
 
     def _get_image(self, item):
-        text_tag = self.soup.find(string=re.compile(r'Смотрите:'))
+        text_tag = item.find(string=re.compile(r'Смотрите:'))
         if not text_tag:
             return None
 
