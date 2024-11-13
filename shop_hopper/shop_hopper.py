@@ -1,5 +1,5 @@
 import requests
-from shop_hopper.response_fetchers import fetch_platform_response
+from shop_hopper.response_fetchers.response_fetcher import get_response_fetcher
 from shop_hopper.parsers.parsers import parsers
 
 # Default list of platforms to search on if none are specified.
@@ -48,8 +48,10 @@ class ShopHopper:
                 continue
 
             self.logger.info(f'Searching in {platform}')
+            response_fetcher = get_response_fetcher(platform)
+
             try:
-                response = fetch_platform_response(platform, request)
+                response = response_fetcher(request)
 
                 if not response.ok:
                     self.logger.error(
