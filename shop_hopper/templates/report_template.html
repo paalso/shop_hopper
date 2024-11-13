@@ -21,10 +21,14 @@
         vertical-align: middle;
       }
       th {
+        text-align: center;
         background-color: #f2f2f2;
       }
       tr:hover {
         background-color: #f1f1f1;
+      }
+      a {
+        text-decoration: none;
       }
       .price {
         text-align: right;
@@ -60,7 +64,7 @@
                 >{{ item.platform.name }}</a
               >
             </td>
-            <td>
+            <td class="title">
               <a href="{{ item.title.url }}" target="_blank">{{ item.title.name }}</a>
             </td>
             <td class="price">{{ item.price }}</td>
