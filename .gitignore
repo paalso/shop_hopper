@@ -13,3 +13,6 @@ coverage.xml
 tmp*
 temp*
 log*
+*.html
+
+!shop_hopper/templates/report_template.html
