@@ -31,6 +31,6 @@ class BookinistParser(BaseParser):
 
     @staticmethod
     def _get_price(item):
-        price_element = item.select_one('.popupInfo.info-sel.a-center p')
-        price = (price_element.getText().split()[1]).split(',')[0]
+        price_element = item.select_one('.fleft>.info-sel p:nth-of-type(2)')
+        price = (price_element.text.split()[1]).split(',')[0]
         return price
