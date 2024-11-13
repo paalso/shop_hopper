@@ -1,64 +1,36 @@
-import re
+import rex
 from shop_hopper.parsers.base_parser import BaseParser
 
 
-class AlibParser(BaseParser):
+class BookinistParser(BaseParser):
+    OFFER_SELECTOR = 'one-book'
+    REGEX_TITLE_CLEANER = re.compile(r'\s+')
+
     def _get_offers(self):
-        paragraphs = self.soup.select('p', recursive=False)
-        result = [p for p in paragraphs
-                  if p.find('b') and p.find('b') == p.contents[0]]
-
-        # To remove the last and irrelevant p like
-        # <b><a href="http://alib.top/findp.php">Расширенный поиск</a></b>
-        result.pop()
-
-        return result
+        return self.soup.find_all('div', class_=self.OFFER_SELECTOR)
 
     @staticmethod
     def _get_platform():
         return {
-            'name': 'alib',
-            'url': 'https://alib.top/'
+            'name': 'Bookinist',
+            'url': 'https://www.bukinist.in.ua/'
         }
 
     def _get_title(self, item):
-        item_content = item.text
-        title_end_position = item_content.find('г.')
-        if title_end_position > 0:
-            title_name = item_content[:title_end_position]
-        else:
-            title_name = item.select_one('b').text
-        title_url = self.query
+        title_element = item.find('div', class_='right-descr').find('p')
+        title_name = self.REGEX_TITLE_CLEANER.sub(
+            ' ', title_element.text.strip())
+        title_url = item.find('a', class_='button').get('href')
         return {
             'name': title_name,
             'url': title_url
         }
 
     def _get_seller(self, item):
-        seller = self._get_name_and_url(item, 'a')
-        if seller.get('name') != 'Купить':
-            return seller
-        return {
-            'name': 'Незарег.',
-            'url': None
-        }
+        return self._get_name_and_url(item, '.fleft>.info-sel a')
 
     @staticmethod
     def _get_price(item):
-        regex = re.compile(r'Цена: (\w+) грн')
-        return regex.search(item.text).group(1)
-
-    def _get_image(self, item):
-        text_tag = self.soup.find(string=re.compile(r'Смотрите:'))
-        if not text_tag:
-            return None
-
-        image_link = text_tag.find_next('a')
-        print(f'image_link: {image_link}')
-
-        if image_link and 'href' in image_link.attrs:
-            href = image_link['href']
-            print(f'href: {href}')
-            return image_link['href']
-
-        return None
+        price_element = item.select_one('.popupInfo.info-sel.a-center p')
+        price = (price_element.getText().split()[1]).split(',')[0]
+        return price
