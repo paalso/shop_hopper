@@ -54,11 +54,8 @@ class AlibParser(BaseParser):
             return None
 
         image_link = text_tag.find_next('a')
-        print(f'image_link: {image_link}')
-
         if image_link and 'href' in image_link.attrs:
             href = image_link['href']
-            print(f'href: {href}')
             return image_link['href']
 
         return None
