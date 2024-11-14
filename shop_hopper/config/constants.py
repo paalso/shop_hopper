@@ -1,1 +1,1 @@
-VALID_PLATFORMS = 'alib', 'newauction', 'olx', 'bookinist', 'violity'
+VALID_PLATFORMS = 'alib', 'newauction', 'olx', 'bookinist'

@@ -33,13 +33,6 @@ _query_url_builders = {
 
     'olx': lambda request: f'https://www.olx.ua/uk/hobbi-otdyh-i-sport/knigi-'
                            f'zhurnaly/q-{request.replace(" ", "-")}/',
-
-    'violity': lambda request: (
-        f'https://violity.com/ru/search/result'
-        f'?auction_id=497'
-        f'&query={urllib.parse.quote_plus(request)}'
-        f'&filter=1&phrase=1&title=on&desc=on'
-    ),
 }
 
 

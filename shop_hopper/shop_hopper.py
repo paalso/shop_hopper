@@ -49,8 +49,7 @@ class ShopHopper:
 
             try:
                 response = response_fetcher(request)
-                print(response)
-                return {}
+
                 if not response.ok:
                     self.logger.error(
                         f'Error occurred while fetching from {platform}: '
