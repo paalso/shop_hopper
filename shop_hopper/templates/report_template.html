@@ -68,7 +68,11 @@
               <a href="{{ item.title.url }}" target="_blank">{{ item.title.name }}</a>
             </td>
             <td class="price">{{ item.price }}</td>
-            <td class="image"><img src="{{ item.img_url }}"></td>
+            <td class="image">
+              {% if item.img_url is not none %}
+                <img src="{{ item.img_url }}">
+              {% endif %}
+            </td>
             <td>
               {% if item.seller.url %}
                 <a href="{{ item.seller.url }}" target="_blank">{{ item.seller.name }}</a>
