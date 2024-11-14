@@ -1,8 +1,8 @@
 import shop_hopper.response_fetchers.get_fetchers as get_fetchers
 import shop_hopper.response_fetchers.post_fetchers as post_fetchers
 
-post_request_platforms = ('bookinist',)
-get_request_platforms = ('alib', 'newauction', 'olx')
+post_request_platforms = 'bookinist',
+get_request_platforms = 'alib', 'newauction', 'olx', 'violity'
 
 
 def get_response_fetcher(platform: str):

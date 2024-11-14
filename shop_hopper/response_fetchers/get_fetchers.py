@@ -26,11 +26,20 @@ def _encode_alib_query(request: str) -> str:
 
 _query_url_builders = {
     'alib': _encode_alib_query,
+
     'newauction': lambda request: f'https://newauction.org/listing/offer/'
                                   f'knigi_bukinistika-121818/search_'
                                   f'{urllib.parse.quote_plus(request)}',
+
     'olx': lambda request: f'https://www.olx.ua/uk/hobbi-otdyh-i-sport/knigi-'
                            f'zhurnaly/q-{request.replace(" ", "-")}/',
+
+    'violity': lambda request: (
+        f'https://violity.com/ru/search/result'
+        f'?auction_id=497'
+        f'&query={urllib.parse.quote_plus(request)}'
+        f'&filter=1&phrase=1&title=on&desc=on'
+    ),
 }
 
 
