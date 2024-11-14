@@ -10,6 +10,8 @@ class BaseParser:
     Child classes must implement methods to extract the title, price, seller,
     and list of offers according to the specific structure of each platform.
     """
+    MISSING_ITEM = {'name': None, 'url': None}
+
     def __init__(self, html, query):
         """
         Initializes the parser with HTML content and the search query URL.
@@ -157,7 +159,7 @@ class BaseParser:
         """
         element = item.select_one(selector)
         if not element:
-            return {'name': None, 'url': None}
+            return self.MISSING_ITEM
 
         name = element.getText().strip()
         href = element.get('href')

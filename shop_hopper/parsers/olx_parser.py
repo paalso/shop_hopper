@@ -33,10 +33,7 @@ class OlxParser(BaseParser):
     # TODO: Unable to retrieve seller info from the search result page.
     #       We can follow the title_url to get the seller's details.
     def _get_seller(self, item):
-        return {
-            'name': None,
-            'url': None
-        }
+        return self.MISSING_ITEM
 
     @staticmethod
     def _get_price(item):

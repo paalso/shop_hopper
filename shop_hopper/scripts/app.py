@@ -2,7 +2,7 @@ from shop_hopper.args_parser import ArgParser
 from shop_hopper.logger import Logger
 from shop_hopper.shop_hopper import ShopHopper
 from shop_hopper.savers import HTMLSaver, JSONSaver
-from shop_hopper.config.constants import VALID_PLATFORMS
+from shop_hopper.config.constants import UNIQUE_VALID_PLATFORMS
 
 
 def main():
@@ -21,7 +21,7 @@ def main():
     request = args.request
     output_dir = args.output_dir
     save_to_json = args.json
-    platforms = args.platforms if args.platforms else VALID_PLATFORMS
+    platforms = args.platforms if args.platforms else UNIQUE_VALID_PLATFORMS
 
     logger = Logger().get_logger()
     shop_hopper = ShopHopper(logger, platforms)
