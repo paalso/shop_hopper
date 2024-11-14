@@ -1,7 +1,7 @@
 from functools import partial
 import requests
 import urllib.parse
-from urllib.parse import quote
+from urllib.parse import quote, quote_plus
 
 _ALIB_REQUEST_HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
@@ -27,12 +27,22 @@ def _encode_alib_query(request: str) -> str:
 _query_url_builders = {
     'alib': _encode_alib_query,
 
-    'newauction': lambda request: f'https://newauction.org/listing/offer/'
-                                  f'knigi_bukinistika-121818/search_'
-                                  f'{urllib.parse.quote_plus(request)}',
+    'newauction': lambda request: (
+        f'https://newauction.org/listing/offer/knigi_bukinistika-121818/'
+        f'search_{urllib.parse.quote_plus(request)}'
+    ),
 
-    'olx': lambda request: f'https://www.olx.ua/uk/hobbi-otdyh-i-sport/knigi-'
-                           f'zhurnaly/q-{request.replace(" ", "-")}/',
+    'olx': lambda request: (
+        f'https://www.olx.ua/uk/hobbi-otdyh-i-sport/knigi-zhurnaly/q-'
+        f'{request.replace(" ", "-")}/'
+    ),
+
+    'unc': lambda request: (
+        f'https://unc.ua/uk/auction?'
+        f'search={quote_plus(request)}'
+        f'&andor_type=and&truncation=true&search_content[]'
+        f'=name&cat=2024&sort=price'
+    ),
 }
 
 
