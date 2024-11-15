@@ -1,6 +1,6 @@
 import requests
-from shop_hopper.response_fetchers.response_fetcher import get_response_fetcher
 from shop_hopper.parsers.parsers import parsers
+from shop_hopper.response_fetcher import ResponseFetcher
 from shop_hopper.config.constants import VALID_PLATFORMS
 
 DEFAULT_TIMEOUT = 10
@@ -23,6 +23,8 @@ class ShopHopper:
         """
         self.platforms = platforms
         self.logger = logger
+        self.timeout = DEFAULT_TIMEOUT
+        self.response_fetcher = ResponseFetcher(self.logger, self.timeout)
 
     def search(self, request):
         """
@@ -37,7 +39,6 @@ class ShopHopper:
             offers from all platforms.
         """
         result = []
-
         for platform in self.platforms:
             parser_class = parsers.get(platform)
             if not parser_class:
@@ -45,10 +46,10 @@ class ShopHopper:
                 continue
 
             self.logger.info(f'Searching in {platform}')
-            response_fetcher = get_response_fetcher(platform)
 
             try:
-                response = response_fetcher(request)
+                response = (
+                    self.response_fetcher.get_response(platform, request))
 
                 if not response.ok:
                     self.logger.error(
@@ -61,13 +62,10 @@ class ShopHopper:
                     parser_class(response.text, response.url).parse())
                 result.extend(parse_result)
                 self.logger.info(
-                    f'Parsed {len(parse_result)} offers from {platform}'
-                )
+                    f'Parsed {len(parse_result)} offers from {platform}')
 
             except requests.exceptions.RequestException as e:
-                self.logger.error(
-                    f'Request failed for {platform}: {e}'
-                )
+                self.logger.error(f'Request failed for {platform}: {e}')
                 continue
 
         return result
