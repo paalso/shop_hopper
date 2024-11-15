@@ -41,6 +41,11 @@ class ResponseFetcher:
         ),
     }
 
+    PLATFORM_ENCODINGS = {
+        'alib': 'windows-1251',
+        'olx': 'utf-8'
+    }
+
     def __init__(self, logger, timeout):
         self.logger = logger
         self.timeout = timeout
@@ -94,7 +99,7 @@ class ResponseFetcher:
         try:
             response = requests.get(
                 query_url, headers=headers, timeout=self.timeout)
-            response.encoding = 'windows-1251' if platform == 'alib' else None
+            response.encoding = self.PLATFORM_ENCODINGS.get(platform)
             return response
         except requests.RequestException:
             raise
