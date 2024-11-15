@@ -15,7 +15,7 @@ selfcheck:
 
 check: selfcheck test lint
 
-build: check
+build:
 	poetry build
 
 # make run ARGS="'Физика Ландсберг' -o tmp_dir"
