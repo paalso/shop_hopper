@@ -44,10 +44,6 @@ _query_url_builders = {
         f'=name&cat=2024&sort=price'
     ),
 
-    'prom': lambda request: (
-        f'https://prom.ua/ua/search?search_term={quote_plus(request)}'
-    ),
-
     'promua': lambda request: (
         f'https://prom.ua/ua/search?search_term={quote_plus(request)}'
     ),

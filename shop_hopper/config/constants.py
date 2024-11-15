@@ -1,5 +1,9 @@
-VALID_PLATFORMS = (
-    'alib', 'newauction', 'olx', 'bookinist', 'unc', 'prom', 'promua')
-
-UNIQUE_VALID_PLATFORMS = (
-    'alib', 'newauction', 'olx', 'bookinist', 'unc', 'prom')
+VALID_PLATFORMS = {
+    'alib': 'alib',
+    'newauction': 'newauction',
+    'olx': 'olx',
+    'bookinist': 'bookinist',
+    'unc': 'unc',
+    'prom': 'promua',
+    'promua': 'promua'
+}

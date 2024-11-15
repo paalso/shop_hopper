@@ -13,7 +13,7 @@ class ShopHopper:
     to extract product data.
     """
 
-    def __init__(self, logger, platforms=VALID_PLATFORMS):
+    def __init__(self, logger, platforms=VALID_PLATFORMS.values()):
         """
         Initializes the ShopHopper instance.
 
