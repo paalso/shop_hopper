@@ -1,9 +1,11 @@
+import re
 from shop_hopper.parsers.base_parser import BaseParser
 
 
 class OlxParser(BaseParser):
     NO_OFFERS_MESSAGE = 'Ми знайшли  0 оголошень'
     OFFER_SELECTOR = 'div.css-qfzx1y'
+    INT_NUMBER_REGEX = re.compile(r'\d+')
 
     def parse(self):
         if self.NO_OFFERS_MESSAGE in self.soup.text:
@@ -12,7 +14,13 @@ class OlxParser(BaseParser):
         return super().parse()
 
     def _get_offers(self):
-        return self.soup.select(self.OFFER_SELECTOR)
+        offers = self.soup.select(self.OFFER_SELECTOR)
+        valid_offers_count_element = (
+            self.soup.select_one('[data-testid="total-count"]'))
+        valid_offers_number = int(self.INT_NUMBER_REGEX.search(
+            valid_offers_count_element.getText()).group(0))
+        valid_offers = offers[:valid_offers_number]
+        return valid_offers
 
     @staticmethod
     def _get_platform():
