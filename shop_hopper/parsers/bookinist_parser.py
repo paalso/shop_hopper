@@ -12,8 +12,8 @@ class BookinistParser(BaseParser):
     @staticmethod
     def _get_platform():
         return {
-            'name': 'Bookinist',
-            'url': 'https://www.bukinist.in.ua/'
+            'name': 'STARIYFANTAST',
+            'url': 'https://stariyfantast.ua.market/'
         }
 
     def _get_title(self, item):

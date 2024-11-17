@@ -39,6 +39,10 @@ class ResponseFetcher:
         'promua': lambda request: (
             f'https://prom.ua/ua/search?search_term={quote_plus(request)}'
         ),
+
+        'stariyfantast': lambda request: (
+            f'https://stariyfantast.ua.market/search?query='
+            f'{quote_plus(request)}')
     }
 
     PLATFORM_ENCODINGS = {

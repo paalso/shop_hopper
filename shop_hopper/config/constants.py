@@ -5,5 +5,7 @@ VALID_PLATFORMS = {
     'bookinist': 'bookinist',
     'unc': 'unc',
     'prom': 'promua',
-    'promua': 'promua'
+    'promua': 'promua',
+    'stariyfantast': 'stariyfantast',
+    'staryfantast': 'stariyfantast',
 }
