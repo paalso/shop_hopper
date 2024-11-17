@@ -104,7 +104,7 @@ class BaseParser:
         Returns:
             str: The seller name.
         """
-        pass
+        return self.MISSING_ITEM
 
     def _get_image(self, offer):
         """
