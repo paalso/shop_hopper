@@ -42,7 +42,11 @@ class ResponseFetcher:
 
         'stariyfantast': lambda request: (
             f'https://stariyfantast.ua.market/search?query='
-            f'{quote_plus(request)}')
+            f'{quote_plus(request)}'),
+
+        'skylots': lambda request: (
+            f'https://skylots.org/search.php?search={quote_plus(request)}'
+            f'&seller_id=0&desc_check=0&catid=121818')
     }
 
     PLATFORM_ENCODINGS = {

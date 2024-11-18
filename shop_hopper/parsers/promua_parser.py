@@ -24,8 +24,6 @@ class PromUaParser(BaseParser):
             'url': title_url
         }
 
-    # TODO: Unable to retrieve seller info from the search result page.
-    #       We can follow the title_url to get the seller's details.
     def _get_seller(self, item):
         seller_element = item.select_one('[data-qaid="company_link"]>a')
         if not seller_element:

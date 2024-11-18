@@ -8,4 +8,5 @@ VALID_PLATFORMS = {
     'promua': 'promua',
     'stariyfantast': 'stariyfantast',
     'staryfantast': 'stariyfantast',
+    'skylots': 'skylots'
 }

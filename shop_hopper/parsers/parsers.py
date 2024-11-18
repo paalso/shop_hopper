@@ -5,6 +5,7 @@ from shop_hopper.parsers.olx_parser import OlxParser
 from shop_hopper.parsers.promua_parser import PromUaParser
 from shop_hopper.parsers.unc_parser import UncParser
 from shop_hopper.parsers.stariyfantast_parser import StariyfantastParser
+from shop_hopper.parsers.skylots_parser import SkyLotsParser
 
 parsers = {
     'newauction': NewauctionParser,
@@ -16,4 +17,5 @@ parsers = {
     'promua': PromUaParser,
     'stariyfantast': StariyfantastParser,
     'staryfantast': StariyfantastParser,
+    'skylots': SkyLotsParser
 }
