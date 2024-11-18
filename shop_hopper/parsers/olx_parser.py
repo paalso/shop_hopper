@@ -4,7 +4,7 @@ from shop_hopper.parsers.base_parser import BaseParser
 
 class OlxParser(BaseParser):
     NO_OFFERS_MESSAGE = 'Ми знайшли  0 оголошень'
-    OFFER_SELECTOR = 'div.css-qfzx1y'
+    OFFER_SELECTOR = '.css-qfzx1y'
     INT_NUMBER_REGEX = re.compile(r'\d+')
 
     def parse(self):
@@ -30,7 +30,7 @@ class OlxParser(BaseParser):
         }
 
     def _get_title(self, item):
-        title_name = item.select_one('h6').getText()
+        title_name = item.select_one('h4').getText()
         title_href = item.find('a').get('href')
         title_url = self._get_full_url(title_href) if title_href else None
         return {
