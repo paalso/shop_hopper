@@ -3,6 +3,12 @@ import urllib.parse
 from shop_hopper.config.constants import VALID_PLATFORMS
 from urllib.parse import quote, quote_plus
 
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.options import Options
+import time
+
 
 class ResponseFetcher:
     POST_REQUEST_FETCHERS = 'bookinist',
@@ -61,6 +67,8 @@ class ResponseFetcher:
     def get_response(self, platform, request):
         base_platform = self._get_base_platform(platform)
 
+        if base_platform == 'violity':
+            return self._fetch_from_violity(request)
         if base_platform in self.POST_REQUEST_FETCHERS:
             return self._fetch_from_bookinist(request)
         elif base_platform in self.GET_REQUEST_PLATFORMS:
@@ -86,6 +94,33 @@ class ResponseFetcher:
             return response
         except requests.RequestException:
             raise
+
+    def _fetch_from_violity(self, request):
+        # Configure the browser
+        options = Options()
+        options.headless = True  # Enable headless mode (no browser window)
+        driver = webdriver.Chrome(
+            service=Service(ChromeDriverManager().install()), options=options)
+
+        # Build the query URL
+        encoded_query = quote_plus(request)
+        query_url = (
+            f'https://violity.com/ru/search/result?auction_id=497&query='
+            f'{encoded_query}&filter=1&phrase=1&title=on&desc=on'
+        )
+        self.logger.debug(f'Query :{query_url}')
+
+        try:
+            driver.get(query_url)
+            time.sleep(3)
+            content = driver.page_source
+        except Exception as e:
+            self.logger.error(f"Failed to fetch content from Violity: {e}")
+            content = None
+        finally:
+            driver.quit()
+
+        return content
 
     @staticmethod
     def _encode_alib_query(request: str) -> str:

@@ -1,9 +1,6 @@
-import requests
 from shop_hopper.parsers.parsers import parsers
-from shop_hopper.response_fetcher import ResponseFetcher
+from shop_hopper.content_fetcher import ContentFetcher
 from shop_hopper.config.constants import VALID_PLATFORMS
-
-DEFAULT_TIMEOUT = 10
 
 
 class ShopHopper:
@@ -23,8 +20,7 @@ class ShopHopper:
         """
         self.platforms = platforms
         self.logger = logger
-        self.timeout = DEFAULT_TIMEOUT
-        self.response_fetcher = ResponseFetcher(self.logger, self.timeout)
+        self.content_fetcher = ContentFetcher(self.logger)
 
     def search(self, request):
         """
@@ -47,25 +43,11 @@ class ShopHopper:
 
             self.logger.info(f'Searching in {platform}')
 
-            try:
-                response = (
-                    self.response_fetcher.get_response(platform, request))
-
-                if not response.ok:
-                    self.logger.error(
-                        f'Error occurred while fetching from {platform}: '
-                        f'{response.status_code} - {response.text}'
-                    )
-                    continue
-
-                parse_result = (
-                    parser_class(response.text, response.url).parse())
-                result.extend(parse_result)
-                self.logger.info(
-                    f'Parsed {len(parse_result)} offers from {platform}')
-
-            except requests.exceptions.RequestException as e:
-                self.logger.error(f'Request failed for {platform}: {e}')
-                continue
+            content, url = self.content_fetcher.fetch_content(
+                platform, request)
+            parse_result = parser_class(content, url).parse()
+            result.extend(parse_result)
+            self.logger.info(
+                f'Parsed {len(parse_result)} offers from {platform}')
 
         return result
