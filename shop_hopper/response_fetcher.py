@@ -34,11 +34,11 @@ class ResponseFetcher:
     def get_response(self, platform, search_query):
         base_platform = resolve_platform_alias(platform)
         if base_platform in POST_REQUEST_PLATFORMS:
-            return self._fetch_from_bookinist(search_query)
+            return self._fetch_from_bukinist(search_query)
         elif base_platform in GET_REQUEST_PLATFORMS:
             return self._fetch_get_response(base_platform, search_query)
 
-    def _fetch_from_bookinist(self, search_query):
+    def _fetch_from_bukinist(self, search_query):
         url = 'https://www.bukinist.in.ua/books/find'
         payload = {'data[Find][username]': search_query, '_method': 'POST'}
         headers = {
@@ -69,8 +69,8 @@ class ResponseFetcher:
                     f'Error occurred while fetching from {platform}: '
                     f'{response.status_code} - {response.text}'
                 )
-
-            response.encoding = self.PLATFORM_ENCODINGS.get(platform)
+            else:
+                response.encoding = self.PLATFORM_ENCODINGS.get(platform)
 
         except requests.exceptions.RequestException as e:
             self.logger.error(f'Request failed for {platform}: {e}')

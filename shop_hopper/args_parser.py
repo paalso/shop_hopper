@@ -1,6 +1,6 @@
 import argparse
 import os
-from shop_hopper.config.platforms import VALID_PLATFORMS
+from shop_hopper.config.platforms import PLATFORM_ALIASES
 
 
 class ArgParser:
@@ -40,11 +40,12 @@ class ArgParser:
             '-p', '--platforms',
             type=str,
             nargs='+',  # Allows one or more values
-            choices=VALID_PLATFORMS,
+            choices=PLATFORM_ALIASES,
             help='One or more platforms to search on. '
-                 'Valid platforms: ' + ', '.join(VALID_PLATFORMS) + '. '
+                 f'Valid platforms: {" ".join(PLATFORM_ALIASES.keys())}. '
                  'You can specify multiple platforms by separating them with '
                  'spaces (e.g., "alib olx").'
+
         )
 
     def parse(self):
