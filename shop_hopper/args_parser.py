@@ -42,7 +42,7 @@ class ArgParser:
             action='store_true',
             help=(
                 'If set, saves the report in JSON format. By default, '
-                'the report is saved in plain text.'
+                'the report is saved in a html file.'
             )
         )
 
