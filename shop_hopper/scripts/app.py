@@ -3,6 +3,7 @@ from shop_hopper.logger import Logger
 from shop_hopper.shop_hopper import ShopHopper
 from shop_hopper.savers import HTMLSaver, JSONSaver
 from shop_hopper.config.platforms import ALL_SUPPORTED_PLATFORMS
+import sys
 
 
 def main():
@@ -22,8 +23,18 @@ def main():
     output_dir = args.output_dir
     save_to_json = args.json
     platforms = args.platforms if args.platforms else ALL_SUPPORTED_PLATFORMS
+    ignored_platforms = args.ignored_platforms or []
+
+    platforms = [platform for platform in platforms
+                 if platform not in ignored_platforms]
 
     logger = Logger().get_logger()
+
+    if not platforms:
+        logger.error(
+            'No platforms left to search after excluding ignored platforms.')
+        sys.exit(1)
+
     shop_hopper = ShopHopper(logger, platforms)
     report = shop_hopper.search(request)
 
@@ -33,6 +44,8 @@ def main():
 
     for saver in savers:
         saver.save(report, request, logger, output_dir)
+
+    logger.info(f'Results saved to {output_dir}')
 
 
 if __name__ == '__main__':
