@@ -1,6 +1,6 @@
 import argparse
 import os
-from shop_hopper.config.constants import VALID_PLATFORMS
+from shop_hopper.config.platforms import VALID_PLATFORMS
 
 
 class ArgParser:

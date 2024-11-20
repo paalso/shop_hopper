@@ -26,7 +26,7 @@ class SkyLotsParser(BaseParser):
 
     def _get_seller(self, item):
         return self._get_name_and_url(
-            item, '.search_lot_seller_rating a:nth-of-type(2)')
+            item, '.seller')
 
     def _get_image(self, item):
         image_element = item.select_one('img.searchimg')

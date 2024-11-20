@@ -1,20 +1,15 @@
 import requests
-import urllib.parse
-from shop_hopper.config.constants import VALID_PLATFORMS
-from urllib.parse import quote, quote_plus
+from shop_hopper.query_url_biulders import build_query_url
+from shop_hopper.config.platforms import (
+    GET_REQUEST_PLATFORMS,
+    POST_REQUEST_PLATFORMS,
+    resolve_platform_alias
+)
 
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.options import Options
-import time
+TIMEOUT = 10
 
 
 class ResponseFetcher:
-    POST_REQUEST_FETCHERS = 'bookinist',
-    GET_REQUEST_PLATFORMS = (set(VALID_PLATFORMS.values()) -
-                             set(POST_REQUEST_FETCHERS))
-
     ALIB_REQUEST_HEADERS = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
                       'AppleWebKit/537.36 (KHTML, like Gecko) '
@@ -27,60 +22,25 @@ class ResponseFetcher:
         'Upgrade-Insecure-Requests': '1'
     }
 
-    QUERY_URL_BUILDERS = {
-        'alib': lambda request: ResponseFetcher._encode_alib_query(request),
-        'newauction': lambda request: (
-            f'https://newauction.org/listing/offer/knigi_bukinistika-121818/'
-            f'search_{urllib.parse.quote_plus(request)}'
-        ),
-        'olx': lambda request: (
-            f'https://www.olx.ua/uk/hobbi-otdyh-i-sport/knigi-zhurnaly/q-'
-            f'{request.replace(" ", "-")}/'
-        ),
-        'unc': lambda request: (
-            f'https://unc.ua/uk/auction?search={quote_plus(request)}'
-            f'&andor_type=and&truncation=true&'
-            f'search_content[]=name&cat=2024&sort=price'
-        ),
-        'promua': lambda request: (
-            f'https://prom.ua/ua/search?search_term={quote_plus(request)}'
-        ),
-
-        'stariyfantast': lambda request: (
-            f'https://stariyfantast.ua.market/search?query='
-            f'{quote_plus(request)}'),
-
-        'skylots': lambda request: (
-            f'https://skylots.org/search.php?search={quote_plus(request)}'
-            f'&seller_id=0&desc_check=0&catid=121818')
-    }
-
     PLATFORM_ENCODINGS = {
         'alib': 'windows-1251',
         'olx': 'utf-8'
     }
 
-    def __init__(self, logger, timeout):
+    def __init__(self, logger, timeout=TIMEOUT):
         self.logger = logger
         self.timeout = timeout
 
-    def get_response(self, platform, request):
-        base_platform = self._get_base_platform(platform)
+    def get_response(self, platform, search_query):
+        base_platform = resolve_platform_alias(platform)
+        if base_platform in POST_REQUEST_PLATFORMS:
+            return self._fetch_from_bookinist(search_query)
+        elif base_platform in GET_REQUEST_PLATFORMS:
+            return self._fetch_get_response(base_platform, search_query)
 
-        if base_platform == 'violity':
-            return self._fetch_from_violity(request)
-        if base_platform in self.POST_REQUEST_FETCHERS:
-            return self._fetch_from_bookinist(request)
-        elif base_platform in self.GET_REQUEST_PLATFORMS:
-            return self._fetch_get_response(base_platform, request)
-
-    @staticmethod
-    def _get_base_platform(platform_alias):
-        return VALID_PLATFORMS[platform_alias]
-
-    def _fetch_from_bookinist(self, request):
+    def _fetch_from_bookinist(self, search_query):
         url = 'https://www.bukinist.in.ua/books/find'
-        payload = {'data[Find][username]': request, '_method': 'POST'}
+        payload = {'data[Find][username]': search_query, '_method': 'POST'}
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
                           'AppleWebKit/537.36 (KHTML, like Gecko) '
@@ -95,54 +55,25 @@ class ResponseFetcher:
         except requests.RequestException:
             raise
 
-    def _fetch_from_violity(self, request):
-        # Configure the browser
-        options = Options()
-        options.headless = True  # Enable headless mode (no browser window)
-        driver = webdriver.Chrome(
-            service=Service(ChromeDriverManager().install()), options=options)
-
-        # Build the query URL
-        encoded_query = quote_plus(request)
-        query_url = (
-            f'https://violity.com/ru/search/result?auction_id=497&query='
-            f'{encoded_query}&filter=1&phrase=1&title=on&desc=on'
-        )
-        self.logger.debug(f'Query :{query_url}')
-
-        try:
-            driver.get(query_url)
-            time.sleep(3)
-            content = driver.page_source
-        except Exception as e:
-            self.logger.error(f"Failed to fetch content from Violity: {e}")
-            content = None
-        finally:
-            driver.quit()
-
-        return content
-
-    @staticmethod
-    def _encode_alib_query(request: str) -> str:
-        encoded_query = request.encode('windows-1251')
-        url_encoded_query = quote(encoded_query)
-        url_encoded_query = url_encoded_query.replace('%20', '+')
-        return f'https://alib.top/find3.php?tfind={url_encoded_query}'
-
-    def _fetch_get_response(self, platform: str, query: str):
-        query_url_builder = self.QUERY_URL_BUILDERS.get(platform)
-
-        if not query_url_builder:
-            raise ValueError(f'Unsupported platform: {platform}')
-
-        query_url = query_url_builder(query)
+    def _fetch_get_response(self, platform: str, search_query: str):
+        query_url = build_query_url(platform, search_query)
         self.logger.debug(f'Query :{query_url}')
         headers = self.ALIB_REQUEST_HEADERS if platform == 'alib' else {}
 
         try:
             response = requests.get(
                 query_url, headers=headers, timeout=self.timeout)
+
+            if not response.ok:
+                self.logger.error(
+                    f'Error occurred while fetching from {platform}: '
+                    f'{response.status_code} - {response.text}'
+                )
+
             response.encoding = self.PLATFORM_ENCODINGS.get(platform)
-            return response
-        except requests.RequestException:
-            raise
+
+        except requests.exceptions.RequestException as e:
+            self.logger.error(f'Request failed for {platform}: {e}')
+            response = None
+
+        return response

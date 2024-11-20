@@ -12,7 +12,7 @@ class BaseParser:
     """
     MISSING_ITEM = {'name': None, 'url': None}
 
-    def __init__(self, html, query):
+    def __init__(self, html, query_url):
         """
         Initializes the parser with HTML content and the search query URL.
 
@@ -20,8 +20,8 @@ class BaseParser:
             html (str): HTML content of the page.
             query (str): Search query URL used to determine the base URL.
         """
-        self.query = query
-        self.base_url = self.__class__._get_base_url(query)
+        self.query = query_url
+        self.base_url = self.__class__._get_base_url(query_url)
         self.soup = BeautifulSoup(html, 'html.parser')
 
     def parse(self):

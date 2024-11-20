@@ -1,6 +1,6 @@
 from shop_hopper.parsers.parsers import parsers
 from shop_hopper.content_fetcher import ContentFetcher
-from shop_hopper.config.constants import VALID_PLATFORMS
+from shop_hopper.config.platforms import ALL_SUPPORTED_PLATFORMS
 
 
 class ShopHopper:
@@ -10,7 +10,7 @@ class ShopHopper:
     to extract product data.
     """
 
-    def __init__(self, logger, platforms=VALID_PLATFORMS.values()):
+    def __init__(self, logger, platforms=ALL_SUPPORTED_PLATFORMS):
         """
         Initializes the ShopHopper instance.
 
@@ -45,6 +45,10 @@ class ShopHopper:
 
             content, url = self.content_fetcher.fetch_content(
                 platform, request)
+
+            if not content:
+                continue
+
             parse_result = parser_class(content, url).parse()
             result.extend(parse_result)
             self.logger.info(
