@@ -28,7 +28,7 @@ class ContentFetcher:
             return content, query_url
 
         except Exception as e:
-            self.logger.error(f"Failed to fetch content from Violity: {e}")
+            self.logger.error(f'Failed to fetch content from Violity: {e}')
             return None, None
         finally:
             self.driver.quit()
@@ -39,9 +39,10 @@ class ContentFetcher:
         options.headless = True  # Enable headless mode (no browser window)
         driver = webdriver.Chrome(
             service=Service(ChromeDriverManager().install()), options=options)
-        driver.execute_cdp_cmd("Network.setBlockedURLs",
-                               {"urls": ["*.css", "*.gif", "*.svg"]})
-        # driver.execute_cdp_cmd("Network.setBlockedURLs",
-        # {"urls": ["*.css", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg"]})
-        driver.execute_cdp_cmd("Network.enable", {})
+
+        driver.execute_cdp_cmd(
+            'Network.setBlockedURLs',
+            {'urls': ['*.css', '*.png', '*.jpg', '*.jpeg', '*.gif', '*.svg']}
+        )
+        driver.execute_cdp_cmd('Network.enable', {})
         return driver
