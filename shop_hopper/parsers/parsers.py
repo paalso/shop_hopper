@@ -12,7 +12,7 @@ parsers = {
     'newauction': NewauctionParser,
     'olx': OlxParser,
     'alib': AlibParser,
-    'bookinist': BookinistParser,
+    'bukinist': BookinistParser,
     'unc': UncParser,
     'prom': PromUaParser,
     'promua': PromUaParser,

@@ -2,7 +2,8 @@ PLATFORM_ALIASES = {
     'alib': 'alib',
     'newauction': 'newauction',
     'olx': 'olx',
-    'bookinist': 'bookinist',
+    'bukinist': 'bukinist',
+    'bookinist': 'bukinist',
     'unc': 'unc',
     'prom': 'promua',
     'promua': 'promua',
@@ -13,7 +14,7 @@ PLATFORM_ALIASES = {
 }
 
 VIA_SELENIUM_FETCH_CONTENT_PLATFORMS = 'violity',
-POST_REQUEST_PLATFORMS = 'bookinist',
+POST_REQUEST_PLATFORMS = 'bukinist',
 GET_REQUEST_PLATFORMS = tuple(
     set(PLATFORM_ALIASES.values()) -
     set(POST_REQUEST_PLATFORMS + POST_REQUEST_PLATFORMS)
