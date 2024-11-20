@@ -49,6 +49,7 @@ class ShopHopper:
             if not content:
                 continue
 
+            self.logger.info(f'Successfully fetched content from {platform}')
             parse_result = parser_class(content, url).parse()
             result.extend(parse_result)
             self.logger.info(

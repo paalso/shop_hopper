@@ -2,7 +2,7 @@ from shop_hopper.parsers.base_parser import BaseParser
 
 
 class ViolityParser(BaseParser):
-    OFFER_SELECTOR = '.tr'
+    OFFER_SELECTOR = 'article.tr'
 
     def _get_offers(self):
         return self.soup.select(self.OFFER_SELECTOR)
@@ -19,12 +19,11 @@ class ViolityParser(BaseParser):
 
     @staticmethod
     def _get_price(item):
-        price_element = item.select_one('.current p')
+        price_element = item.select_one('.price .current p')
         price = price_element.getText()
         return price
 
     def _get_image(self, item):
         img_element = item.select_one('img')
-
-        img_url = img_element.get('src')
+        img_url = img_element.get('data-original')
         return img_url

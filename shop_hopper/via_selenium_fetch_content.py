@@ -14,10 +14,9 @@ class ContentFetcher:
         self.driver = self._initialize_driver()
 
     def fetch_content(self, search_query):
-        self._get_page_source_from_violity(search_query)
+        return self._get_page_source_from_violity(search_query)
 
     def _get_page_source_from_violity(self, search_query):
-        # Build the query URL
         query_url = build_query_url('violity', search_query)
         self.logger.debug(f'Query :{query_url}')
 
@@ -25,6 +24,7 @@ class ContentFetcher:
             self.driver.get(query_url)
             time.sleep(TIMEOUT)
             content = self.driver.page_source
+            self.logger.debug('Successfully fetched content from violity')
             return content, query_url
 
         except Exception as e:

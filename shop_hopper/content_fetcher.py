@@ -5,7 +5,6 @@ from shop_hopper.config.platforms import (
 from shop_hopper.via_selenium_fetch_content import \
     ContentFetcher as SeleniumContentFetcher
 from shop_hopper.response_fetcher import ResponseFetcher
-from shop_hopper.query_url_biulders import build_query_url
 
 
 class ContentFetcher:
@@ -17,8 +16,7 @@ class ContentFetcher:
 
         if base_platform in VIA_SELENIUM_FETCH_CONTENT_PLATFORMS:
             content_fetcher = SeleniumContentFetcher(self.logger)
-            content = content_fetcher.fetch_content(search_query)
-            query_url = build_query_url(base_platform, search_query)
+            content, query_url = content_fetcher.fetch_content(search_query)
         else:
             response_fetcher = ResponseFetcher(self.logger).get_response
             response = response_fetcher(platform, search_query)
