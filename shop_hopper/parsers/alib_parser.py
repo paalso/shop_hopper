@@ -5,14 +5,23 @@ from shop_hopper.parsers.base_parser import BaseParser
 class AlibParser(BaseParser):
     def _get_offers(self):
         paragraphs = self.soup.select('p', recursive=False)
-        result = [p for p in paragraphs
-                  if p.find('b') and p.find('b') == p.contents[0]]
+        result = [
+            p for p in paragraphs
+            if (bold := p.find('b')) and bold == p.contents[0]
+            and not self._is_in_excluded_table(p)
+        ]
 
-        # To remove the last and irrelevant p like
-        # <b><a href="http://alib.top/findp.php">Расширенный поиск</a></b>
-        result.pop()
+        if result and 'Расширенный поиск' in result[-1].text:
+            result.pop()
 
         return result
+
+    @staticmethod
+    def _is_in_excluded_table(element):
+        table = element.find_parent('table')
+        if table:
+            return True
+        return False
 
     @staticmethod
     def _get_platform():
