@@ -2,10 +2,12 @@ from shop_hopper.query_url_biulders import build_query_url
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.core.driver_cache import DriverCacheManager
 from selenium.webdriver.chrome.options import Options
 import time
 
 TIMEOUT = 3
+CACHE_VALID_RANGE = 183     # 6 months
 
 
 class ContentFetcher:
@@ -34,15 +36,22 @@ class ContentFetcher:
             self.driver.quit()
 
     @staticmethod
-    def _initialize_driver():      # Configure the browser
+    def _initialize_driver():  # Configure the browser
         options = Options()
         options.headless = True  # Enable headless mode (no browser window)
         driver = webdriver.Chrome(
-            service=Service(ChromeDriverManager().install()), options=options)
+            service=Service(
+                ChromeDriverManager(
+                    cache_manager=DriverCacheManager(
+                        valid_range=CACHE_VALID_RANGE)
+                ).install()
+            ),
+            options=options,
+        )
 
         driver.execute_cdp_cmd(
-            'Network.setBlockedURLs',
-            {'urls': ['*.css', '*.png', '*.jpg', '*.jpeg', '*.gif', '*.svg']}
+            "Network.setBlockedURLs",
+            {"urls": ["*.css", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg"]},
         )
-        driver.execute_cdp_cmd('Network.enable', {})
+        driver.execute_cdp_cmd("Network.enable", {})
         return driver
