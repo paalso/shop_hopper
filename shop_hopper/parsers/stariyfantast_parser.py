@@ -15,7 +15,7 @@ class StariyfantastParser(BaseParser):
         }
 
     def _get_title(self, item):
-        return self._get_name_and_url(item, '.namePI')
+        return self._get_name_and_url(item, '.namePI a')
 
     def _get_image(self, item):
         image_element = item.select_one('.mainImagePI img')
