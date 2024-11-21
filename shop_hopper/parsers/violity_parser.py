@@ -23,7 +23,19 @@ class ViolityParser(BaseParser):
         price = price_element.getText()
         return price
 
+    def _get_seller(self, item):
+        seller_element = item.select_one('.seller a')
+        if not seller_element:
+            return self.MISSING_ITEM
+
+        seller_url = seller_element.get('href')
+        seller_name = seller_element.select_one('u').getText()
+        return {
+            'name': seller_name,
+            'url': seller_url
+        }
+
     def _get_image(self, item):
         img_element = item.select_one('img')
-        img_url = img_element.get('data-original')
+        img_url = img_element.get('src')
         return img_url
