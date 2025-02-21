@@ -4,6 +4,7 @@ from shop_hopper.shop_hopper import ShopHopper
 from shop_hopper.savers import HTMLSaver, JSONSaver
 from shop_hopper.config.platforms import ALL_SUPPORTED_PLATFORMS
 import sys
+import webbrowser
 
 
 def parse_arguments():
@@ -39,8 +40,29 @@ def save_results(report, request, logger, output_dir, save_to_json):
     if save_to_json:
         savers.append(JSONSaver())
 
+    html_file_path = None
     for saver in savers:
-        saver.save(report, request, logger, output_dir)
+        file_path = saver.save(report, request, logger, output_dir)
+        if isinstance(saver, HTMLSaver):
+            html_file_path = file_path
+
+    return html_file_path
+
+
+def open_in_browser(file_path, logger):
+    """Opens the HTML report in a web browser."""
+    if not file_path:
+        logger.warning(
+            'HTML file was not saved, opening in the browser was skipped.')
+        return
+
+    try:
+        chrome = webbrowser.get('google-chrome')
+        chrome.open(file_path, new=2)
+    except webbrowser.Error:
+        logger.warning(
+            'Google Chrome not found, opening in the default browser.')
+        webbrowser.open(file_path, new=2)
 
 
 def main():
@@ -57,7 +79,9 @@ def main():
     args, platforms = parse_arguments()
     logger = setup_logger()
     report = perform_search(logger, platforms, args.request)
-    save_results(report, args.request, logger, args.output_dir, args.json)
+    html_file_path = \
+        save_results(report, args.request, logger, args.output_dir, args.json)
+    open_in_browser(html_file_path, logger)
     logger.info(f'Results saved to {args.output_dir}')
 
 
