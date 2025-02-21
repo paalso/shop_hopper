@@ -10,7 +10,11 @@ class JSONSaver(Saver):
         filename = f"{'_'.join(query.lower().split())}_{timestamp}.json"
         full_filename = os.path.join(output_dir, filename)
 
-        with open(full_filename, 'w', encoding='utf-8') as f:
-            json.dump(data, f, ensure_ascii=False, indent=4)
+        try:
+            with open(full_filename, 'w', encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, indent=4)
 
-        logger.info(f'Data saved to {full_filename}')
+            logger.info(f'Data saved to {full_filename}')
+            return full_filename
+        except OSError as e:
+            logger.error(f'File save error: {e}')

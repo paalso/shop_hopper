@@ -17,10 +17,14 @@ class HTMLSaver(Saver):
 
         html_content = self.template.render(query=query, data=data)
 
-        with open(full_filename, 'w', encoding='utf-8') as f:
-            f.write(html_content)
+        try:
+            with open(full_filename, 'w', encoding='utf-8') as f:
+                f.write(html_content)
 
-        logger.info(f'Data saved to {full_filename}')
+            logger.info(f'Data saved to {full_filename}')
+            return full_filename
+        except OSError as e:
+            logger.error(f'File save error: {e}')
 
     @staticmethod
     def _get_templates_dir():
