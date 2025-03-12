@@ -1,5 +1,4 @@
 import os
-from datetime import datetime
 from jinja2 import Environment, FileSystemLoader
 from shop_hopper.savers.saver import Saver
 
@@ -11,18 +10,16 @@ class HTMLSaver(Saver):
         self.template = self.env.get_template('report_template.html')
 
     def save(self, data, query, logger, output_dir='.'):
-        timestamp = datetime.now().strftime("%d_%m_%Y_%H_%M")
-        filename = f"{'_'.join(query.lower().split())}_{timestamp}.html"
-        full_filename = os.path.join(output_dir, filename)
+        path_to_save = self._build_file_path(query, output_dir, 'html')
 
         html_content = self.template.render(query=query, data=data)
 
         try:
-            with open(full_filename, 'w', encoding='utf-8') as f:
+            with open(path_to_save, 'w', encoding='utf-8') as f:
                 f.write(html_content)
 
-            logger.info(f'Data saved to {full_filename}')
-            return full_filename
+            logger.info(f'Data saved to {path_to_save}')
+            return path_to_save
         except OSError as e:
             logger.error(f'File save error: {e}')
 

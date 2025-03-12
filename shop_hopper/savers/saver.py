@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+from datetime import datetime
+import os
 
 
 class Saver(ABC):
@@ -24,3 +26,11 @@ class Saver(ABC):
                                   Defaults to the current directory ('.').
         """
         pass
+
+    def _build_file_path(self, query, output_dir, file_extension):
+        """Generates the full path to save the file based
+           on the request and the current date."""
+        timestamp = datetime.now().strftime("%d_%m_%Y_%H_%M")
+        filename = \
+            f"{'_'.join(query.lower().split())}_{timestamp}.{file_extension}"
+        return os.path.join(output_dir, filename)
