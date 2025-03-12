@@ -1,6 +1,20 @@
 import argparse
 import os
 from shop_hopper.config.platforms import PLATFORM_ALIASES
+import tomllib
+
+
+def get_version():
+    """Retrieves the priject version from pyproject.toml."""
+    pyproject_path = os.path.join(os.path.dirname(
+        os.path.dirname(__file__)), 'pyproject.toml')
+
+    try:
+        with open(pyproject_path, 'rb') as f:
+            data = tomllib.load(f)
+            return data['tool']['poetry']['version']
+    except (FileNotFoundError, KeyError):
+        return 'Unknown'
 
 
 class ArgParser:
@@ -70,6 +84,13 @@ class ArgParser:
                 'This option takes precedence over the platforms included '
                 'using the --platforms option.'
             )
+        )
+
+        self.parser.add_argument(
+            '-v', '--version',
+            action='version',
+            version=f"Shop Hopper {get_version()}",
+            help='Show the program version and exit.'
         )
 
     def parse(self):

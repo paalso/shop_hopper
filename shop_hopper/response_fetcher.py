@@ -52,8 +52,11 @@ class ResponseFetcher:
             response = requests.post(
                 url, data=payload, headers=headers, timeout=self.timeout)
             return response
-        except requests.RequestException:
-            raise
+        except requests.exceptions.RequestException as e:
+            self.logger.error(f'Request failed for bukinist: {e}')
+            response = None
+
+        return response
 
     def _fetch_get_response(self, platform: str, search_query: str):
         query_url = build_query_url(platform, search_query)
