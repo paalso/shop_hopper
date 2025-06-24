@@ -3,6 +3,7 @@ from shop_hopper.logger import Logger
 from shop_hopper.shop_hopper import ShopHopper
 from shop_hopper.savers import HTMLSaver, JSONSaver
 from shop_hopper.config.platforms import ALL_SUPPORTED_PLATFORMS
+import time
 import sys
 import webbrowser
 
@@ -31,7 +32,15 @@ def setup_logger():
 def perform_search(logger, platforms, request):
     """Performs the search and returns the results."""
     shop_hopper = ShopHopper(logger, platforms)
-    return shop_hopper.search(request)
+
+    start_time = time.time()
+    result = shop_hopper.search(request)
+    end_time = time.time()
+
+    elapsed = end_time - start_time
+    logger.info(f'Search completed in {elapsed:.2f} seconds')
+
+    return result
 
 
 def save_results(report, request, logger, output_dir, save_to_json):

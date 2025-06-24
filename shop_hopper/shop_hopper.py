@@ -47,6 +47,7 @@ class ShopHopper:
                 platform, request)
 
             if not content:
+                self.logger.warning('No content found')
                 continue
 
             self.logger.info(f'Successfully fetched content from {platform}')

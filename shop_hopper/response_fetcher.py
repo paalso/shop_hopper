@@ -51,7 +51,6 @@ class ResponseFetcher:
         try:
             response = requests.post(
                 url, data=payload, headers=headers, timeout=self.timeout)
-            return response
         except requests.exceptions.RequestException as e:
             self.logger.error(f'Request failed for bukinist: {e}')
             response = None
