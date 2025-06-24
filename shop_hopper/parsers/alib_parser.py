@@ -27,6 +27,7 @@ class AlibParser(BaseParser):
     def _get_platform():
         return {
             'name': 'alib',
+            'alias': 'alib',
             'url': 'https://alib.top/'
         }
 

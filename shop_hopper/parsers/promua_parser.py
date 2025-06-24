@@ -11,6 +11,7 @@ class PromUaParser(BaseParser):
     def _get_platform():
         return {
             'name': 'Prom.ua',
+            'alias': 'promua',
             'url': 'https://prom.ua/'
         }
 

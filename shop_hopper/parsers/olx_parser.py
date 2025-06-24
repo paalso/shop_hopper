@@ -26,6 +26,7 @@ class OlxParser(BaseParser):
     def _get_platform():
         return {
             'name': 'OLX',
+            'alias': 'olx',
             'url': 'https://www.olx.ua'
         }
 

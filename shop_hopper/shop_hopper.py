@@ -22,7 +22,8 @@ class ShopHopper:
         self.logger = logger
         self.content_fetcher = ContentFetcher(self.logger)
 
-    def search(self, request):
+    def \
+            search(self, request):
         """
         Searches for products based on the given request across
         the specified platforms.
@@ -50,10 +51,10 @@ class ShopHopper:
                 self.logger.warning('No content found')
                 continue
 
-            self.logger.info(f'Successfully fetched content from {platform}')
+            self.logger.debug(f'Successfully fetched content from {platform}')
             parse_result = parser_class(content, url).parse()
             result.extend(parse_result)
-            self.logger.info(
+            self.logger.debug(
                 f'Parsed {len(parse_result)} offers from {platform}')
 
         return result

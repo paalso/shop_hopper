@@ -18,7 +18,7 @@ class HTMLSaver(Saver):
             with open(path_to_save, 'w', encoding='utf-8') as f:
                 f.write(html_content)
 
-            logger.info(f'Data saved to {path_to_save}')
+            logger.debug(f'Data saved to {path_to_save}')
             return path_to_save
         except OSError as e:
             logger.error(f'File save error: {e}')

@@ -11,6 +11,7 @@ class SkyLotsParser(BaseParser):
     def _get_platform():
         return {
             'name': 'SkyLots',
+            'alias': 'skylots',
             'url': 'https://skylots.org/'
         }
 

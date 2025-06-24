@@ -11,6 +11,7 @@ class ViolityParser(BaseParser):
     def _get_platform():
         return {
             'name': 'Violity',
+            'alias': 'violity',
             'url': 'https://violity.com/ua'
         }
 

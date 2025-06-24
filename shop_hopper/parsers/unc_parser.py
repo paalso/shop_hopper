@@ -11,6 +11,7 @@ class UncParser(BaseParser):
     def _get_platform():
         return {
             'name': 'UNC',
+            'alias': 'unc',
             'url': 'https://unc.ua/'
         }
 

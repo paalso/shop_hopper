@@ -13,6 +13,7 @@ class NewauctionParser(BaseParser):
     def _get_platform():
         return {
             'name': 'NewAuction',
+            'alias': 'newauction',
             'url': 'https://newauction.org/'
         }
 

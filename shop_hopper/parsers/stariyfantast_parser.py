@@ -11,6 +11,7 @@ class StariyfantastParser(BaseParser):
     def _get_platform():
         return {
             'name': 'STARIYFANTAST',
+            'alias': 'stariyfantast',
             'url': 'https://newauction.org/'
         }
 

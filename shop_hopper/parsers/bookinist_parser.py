@@ -13,6 +13,7 @@ class BookinistParser(BaseParser):
     def _get_platform():
         return {
             'name': 'Bukinist',
+            'alias': 'bukinist',
             'url': 'https://www.bukinist.in.ua/'
         }
 

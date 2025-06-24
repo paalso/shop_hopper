@@ -1,11 +1,16 @@
+from collections import Counter
+from rich import print
+from rich.console import Console
+from rich.table import Table
+import sys
+import time
+import webbrowser
+
 from shop_hopper.args_parser import ArgParser
 from shop_hopper.logger import Logger
 from shop_hopper.shop_hopper import ShopHopper
 from shop_hopper.savers import HTMLSaver, JSONSaver
 from shop_hopper.config.platforms import ALL_SUPPORTED_PLATFORMS
-import time
-import sys
-import webbrowser
 
 
 def parse_arguments():
@@ -30,17 +35,41 @@ def setup_logger():
 
 
 def perform_search(logger, platforms, request):
-    """Performs the search and returns the results."""
+    """Performs the search and returns results + duration in seconds."""
     shop_hopper = ShopHopper(logger, platforms)
 
+    logger.debug(f"Starting search for '{request}' on {platforms}")
     start_time = time.time()
-    result = shop_hopper.search(request)
-    end_time = time.time()
+    search_result = shop_hopper.search(request)
+    elapsed = time.time() - start_time
 
-    elapsed = end_time - start_time
-    logger.info(f'Search completed in {elapsed:.2f} seconds')
+    logger.debug(f'Search completed in {elapsed:.2f} seconds')
+    return search_result, elapsed
 
-    return result
+
+def print_search_summary(search_result, platforms):
+    platform_counter = Counter(
+        entry['platform'].get('alias') or entry['platform']['name'].lower()
+        for entry in search_result
+    )
+
+    alias_to_name = {
+        (entry['platform'].get('alias') or entry['platform']['name'].lower()):
+        entry['platform']['name']
+        for entry in search_result
+    }
+
+    table = Table(show_header=True, header_style="bold magenta")
+    table.add_column("Платформа", style="cyan")
+    table.add_column("Найдено", justify="right", style="green")
+
+    for alias in platforms:
+        count = platform_counter.get(alias, 0)
+        name = alias_to_name.get(alias, alias)
+        icon = "🟢" if count > 0 else "⚪"
+        table.add_row(f"{icon} {name}", str(count))
+
+    Console().print(table)
 
 
 def save_results(report, request, logger, output_dir, save_to_json):
@@ -87,10 +116,28 @@ def main():
     """
     args, platforms = parse_arguments()
     logger = setup_logger()
-    report = perform_search(logger, platforms, args.request)
-    html_file_path = \
-        save_results(report, args.request, logger, args.output_dir, args.json)
+    ignored_platforms = args.ignored_platforms
+
+    print(
+        f'[bold green]🔍 Поиск:[/] [cyan]{args.request}[/] на '
+        f'[yellow]{len(platforms)}[/] платформах...')
+
+    if ignored_platforms:
+        excluded = ', '.join(f'[red]{p}[/]' for p in ignored_platforms)
+        print(f'[dim]🛑 Исключенные платформы:[/] {excluded}')
+    else:
+        print('[dim]✅ Все платформы включены в поиск[/]')
+
+    search_result, elapsed = perform_search(logger, platforms, args.request)
+
+    print(f'[bold green]✅ Завершено за {elapsed:.2f} секунд[/]')
+
+    print_search_summary(search_result, platforms)
+
+    html_file_path = save_results(
+        search_result, args.request, logger, args.output_dir, args.json)
     open_in_browser(html_file_path, logger)
+
     logger.info(f'Results saved to {args.output_dir}')
 
 
