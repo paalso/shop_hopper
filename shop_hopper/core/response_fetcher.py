@@ -1,5 +1,5 @@
 import requests
-from shop_hopper.query_url_biulders import build_query_url
+from shop_hopper.core.query_url_biulders import build_query_url
 from shop_hopper.config.platforms import (
     GET_REQUEST_PLATFORMS,
     POST_REQUEST_PLATFORMS,

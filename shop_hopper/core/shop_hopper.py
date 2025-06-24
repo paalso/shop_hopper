@@ -1,5 +1,5 @@
 from shop_hopper.parsers.parsers import parsers
-from shop_hopper.content_fetcher import ContentFetcher
+from shop_hopper.core.content_fetcher import ContentFetcher
 from shop_hopper.config.platforms import ALL_SUPPORTED_PLATFORMS
 
 

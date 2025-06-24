@@ -8,7 +8,7 @@ import webbrowser
 
 from shop_hopper.args_parser import ArgParser
 from shop_hopper.logger import Logger
-from shop_hopper.shop_hopper import ShopHopper
+from shop_hopper.core.shop_hopper import ShopHopper
 from shop_hopper.savers import HTMLSaver, JSONSaver
 from shop_hopper.config.platforms import ALL_SUPPORTED_PLATFORMS
 

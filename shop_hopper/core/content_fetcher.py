@@ -2,9 +2,9 @@ from shop_hopper.config.platforms import (
     VIA_SELENIUM_FETCH_CONTENT_PLATFORMS,
     resolve_platform_alias
 )
-from shop_hopper.via_selenium_content_fetcher import \
+from shop_hopper.core.via_selenium_content_fetcher import \
     ContentFetcher as SeleniumContentFetcher
-from shop_hopper.response_fetcher import ResponseFetcher
+from shop_hopper.core.response_fetcher import ResponseFetcher
 
 
 class ContentFetcher:

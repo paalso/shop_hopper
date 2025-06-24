@@ -1,4 +1,4 @@
-from shop_hopper.query_url_biulders import build_query_url
+from shop_hopper.core.query_url_biulders import build_query_url
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
