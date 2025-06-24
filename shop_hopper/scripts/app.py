@@ -60,14 +60,14 @@ def print_search_summary(search_result, platforms):
     }
 
     table = Table(show_header=True, header_style="bold magenta")
-    table.add_column("Платформа", style="cyan")
-    table.add_column("Найдено", justify="right", style="green")
+    table.add_column('Платформа', style='cyan')
+    table.add_column('Найдено', justify='right', style='green')
 
     for alias in platforms:
         count = platform_counter.get(alias, 0)
         name = alias_to_name.get(alias, alias)
         icon = "🟢" if count > 0 else "⚪"
-        table.add_row(f"{icon} {name}", str(count))
+        table.add_row(f'{icon} {name}', str(count) if count else '')
 
     Console().print(table)
 
@@ -138,7 +138,8 @@ def main():
         search_result, args.request, logger, args.output_dir, args.json)
     open_in_browser(html_file_path, logger)
 
-    logger.info(f'Results saved to {args.output_dir}')
+    logger.debug(f'Results saved to {args.output_dir}')
+    print(f'[bold green]📁 Результаты сохранены в {html_file_path}[/]')
 
 
 if __name__ == '__main__':
