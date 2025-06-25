@@ -1,0 +1,25 @@
+# file: .github/workflows/ci.yml
+
+name: CI
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "^3.11"
+
+      - name: Install poetry
+        uses: SG60/setup-poetry@v1
+
+      - name: Install project dependencies
+        run: make install
+
+      - name: Run linter
+        run: make lint
