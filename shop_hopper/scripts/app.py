@@ -47,6 +47,37 @@ def perform_search(logger, platforms, request):
     return search_result, elapsed
 
 
+def print_intro(args, platforms):
+    print(
+        f'[bold green]🔍 Поиск:[/] [cyan]{args.request}[/] на '
+        f'[yellow]{len(platforms)}[/] платформах...'
+    )
+    if args.ignored_platforms:
+        excluded = ', '.join(f'[red]{p}[/]' for p in args.ignored_platforms)
+        print(f'[dim]🛑 Исключенные платформы:[/] {excluded}')
+    else:
+        print('[dim]✅ Все платформы включены в поиск[/]')
+
+
+def print_saved_paths(paths):
+    print('[bold green]📁 Результаты сохранены в[/]')
+    for path in paths.values():
+        print(f'[bold green]- {path}[/]')
+
+
+def maybe_open_in_browser(html_path, logger):
+    if not html_path:
+        logger.info('Нет HTML-файла для открытия в браузере.')
+        return
+    try:
+        browser = webbrowser.get('google-chrome')
+        browser.open(html_path, new=2)
+    except webbrowser.Error:
+        logger.warning(
+            'Google Chrome не найден, используется браузер по умолчанию.')
+        webbrowser.open(html_path, new=2)
+
+
 def print_search_summary(search_result, platforms):
     platform_counter = Counter(
         entry['platform'].get('alias') or entry['platform']['name'].lower()
@@ -54,7 +85,8 @@ def print_search_summary(search_result, platforms):
     )
 
     alias_to_name = {
-        (entry['platform'].get('alias') or entry['platform']['name'].lower()):
+        (entry['platform'].get('alias') or
+         entry['platform']['name'].lower()):
         entry['platform']['name']
         for entry in search_result
     }
@@ -72,19 +104,26 @@ def print_search_summary(search_result, platforms):
     Console().print(table)
 
 
-def save_results(report, request, logger, output_dir, save_to_json):
+def save_results(report, search_command_args, logger):
     """Saves search results in the specified format."""
+    output_dir = search_command_args.output_dir
+    save_to_json = search_command_args.json
+    request = search_command_args.request
+
     savers = [HTMLSaver()]
     if save_to_json:
         savers.append(JSONSaver())
 
-    html_file_path = None
+    paths_of_saved_results = {}
+
     for saver in savers:
         file_path = saver.save(report, request, logger, output_dir)
         if isinstance(saver, HTMLSaver):
-            html_file_path = file_path
+            paths_of_saved_results['html'] = file_path
+        elif isinstance(saver, JSONSaver):
+            paths_of_saved_results['json'] = file_path
 
-    return html_file_path
+    return paths_of_saved_results
 
 
 def open_in_browser(file_path, logger):
@@ -116,17 +155,8 @@ def main():
     """
     args, platforms = parse_arguments()
     logger = setup_logger()
-    ignored_platforms = args.ignored_platforms
 
-    print(
-        f'[bold green]🔍 Поиск:[/] [cyan]{args.request}[/] на '
-        f'[yellow]{len(platforms)}[/] платформах...')
-
-    if ignored_platforms:
-        excluded = ', '.join(f'[red]{p}[/]' for p in ignored_platforms)
-        print(f'[dim]🛑 Исключенные платформы:[/] {excluded}')
-    else:
-        print('[dim]✅ Все платформы включены в поиск[/]')
+    print_intro(args, platforms)
 
     search_result, elapsed = perform_search(logger, platforms, args.request)
 
@@ -134,12 +164,10 @@ def main():
 
     print_search_summary(search_result, platforms)
 
-    html_file_path = save_results(
-        search_result, args.request, logger, args.output_dir, args.json)
-    open_in_browser(html_file_path, logger)
-
-    logger.debug(f'Results saved to {args.output_dir}')
-    print(f'[bold green]📁 Результаты сохранены в {html_file_path}[/]')
+    saved_paths = save_results(search_result, args, logger)
+    if saved_paths:
+        print_saved_paths(saved_paths)
+        maybe_open_in_browser(saved_paths.get('html'), logger)
 
 
 if __name__ == '__main__':
