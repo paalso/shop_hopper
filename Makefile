@@ -1,32 +1,25 @@
-# 📦 Установить зависимости через Poetry (для разработки)
-install:
+install: ## 📦 Установить зависимости через Poetry (для разработки)
 	poetry install
 
-# 🧪 Прогнать тесты
-test:
+test: ## 🧪 Прогнать тесты
 	poetry run pytest
 
-# 🧪 Покрытие тестами + отчёт в формате XML
-test-coverage:
+test-coverage: ## 🧪 Покрытие тестами + отчёт в формате XML
 	poetry run pytest --cov=shop_hopper --cov-report xml
 
-# 🧹 Проверка линтинга
-lint:
+lint: ## 🧹 Проверка линтинга
 	poetry run flake8 shop_hopper
 
-# 🔍 Проверка pyproject и зависимостей
-selfcheck:
+selfcheck: ## 🔍 Проверка pyproject и зависимостей
 	poetry check
 
-# 🔁 Полная проверка: синтаксис + тесты + линтинг
-check: selfcheck test lint
+check: selfcheck test lint ## 🔁 Полная проверка: синтаксис + тесты + линтинг
 
-# 🛠️ Сборка wheel/dists
-build:
+
+build: ## 🛠️ Сборка wheel/dists
 	poetry build
 
-# 📦 Переустановить последний wheel локально через pipx (изолировано и безопасно)
-reinstall-wheel:
+reinstall-wheel: ## 📦 Переустановить последний wheel локально через pipx (изолировано и безопасно)
 	@latest_wheel=$$(ls -t dist/*.whl | head -n1); \
 	if [ -z "$$latest_wheel" ]; then \
 		echo "❌ No .whl file found in dist/"; \
@@ -35,21 +28,21 @@ reinstall-wheel:
 	echo "📦 Installing $$latest_wheel with pipx..."; \
 	pipx install --force "$$latest_wheel"
 
-# 🔁 Альяс для reinstall-wheel — удобен при разработке
-publish-local: reinstall-wheel
+publish-local: reinstall-wheel ## 📦 Алиас для reinstall-wheel — удобен при разработке
 
-# 🗑️ Удалить установленный через pipx shop-hopper
-uninstall-cli:
+
+uninstall-cli: ## 🗑️ Удалить установленный через pipx shop-hopper
 	pipx uninstall shop-hopper
 
-# 🚀 Запуск с аргументами (пример: make run ARGS="'Мастер и Маргарита' -o out")
-run:
+run: ## 🚀 Запуск с аргументами (пример: make run ARGS="'Мастер и Маргарита' -o out")
 	poetry run python3 -m shop_hopper.scripts.app $(ARGS)
 
-# 🌐 Установка последней версии с GitHub через pipx (как CLI)
-install-from-git:
+install-from-git: ## 🌐 Установка последней версии с GitHub через pipx (как CLI)
 	@GIT_URL=https://github.com/paalso/shop_hopper.git; \
 	echo "🌐 Installing Shop Hopper from $$GIT_URL via pipx..."; \
 	pipx install --force "$$GIT_URL"
 
-.PHONY: install test test-coverage lint selfcheck check build reinstall-wheel publish-local run install-from-git
+help: ## 📘 Вывод всех доступных команд и описаний
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' Makefile | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
+
+.PHONY: install test test-coverage lint selfcheck check build reinstall-wheel publish-local uninstall-cli run install-from-git help
