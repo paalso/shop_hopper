@@ -4,7 +4,7 @@ from shop_hopper.parsers.base_parser import BaseParser
 
 class OlxParser(BaseParser):
     NO_OFFERS_MESSAGE = 'Ми знайшли  0 оголошень'
-    OFFER_SELECTOR = '.css-qfzx1y'
+    OFFER_SELECTOR = '.css-j0t2x2'
     INT_NUMBER_REGEX = re.compile(r'\d+')
 
     def parse(self):
@@ -19,7 +19,14 @@ class OlxParser(BaseParser):
             self.soup.select_one('[data-testid="total-count"]'))
         valid_offers_number = int(self.INT_NUMBER_REGEX.search(
             valid_offers_count_element.getText()).group(0))
-        valid_offers = offers[:valid_offers_number]
+        if valid_offers_number == 0:
+            return []
+
+        valid_offers = [
+            item for item in offers[0]
+            if item.get('data-cy') == 'l-card'
+        ]
+
         return valid_offers
 
     @staticmethod
