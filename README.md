@@ -27,14 +27,14 @@ pipx install git+https://github.com/paalso/shop_hopper.git
 ```
 git clone https://github.com/your-username/shop_hopper.git
 cd shop_hopper
-poetry install
+make install
 cp .env_copy .env
 ```
 
 ## 🧑‍💻 Использование
 
 ```
-shop-hopper "лукас арт дизайн" -p olx alib --json
+shop-hopper "чалий сто пригод барвінка" -p olx alib --json
 ```
 
 ### Аргументы CLI
