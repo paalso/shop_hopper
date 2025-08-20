@@ -10,7 +10,7 @@ packages = [{ include = "shop_hopper" }]
 shop-hopper = "shop_hopper.scripts.app:main"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.10"
 pyyaml = "^6.0.2"
 requests = "^2.32.3"
 beautifulsoup4 = "^4.12.3"
