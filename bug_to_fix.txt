@@ -1,0 +1,30 @@
+~/Projects/cli-utils  (main)$ shop-hopper -o ~/Books/book-selling/ 'енде момо'
+🔍 Поиск: енде момо на 9 платформах...
+✅ Все платформы включены в поиск
+[12:41:49] INFO     Searching in stariyfantast                                                                    shop_hopper.py:45
+           INFO     Searching in alib                                                                             shop_hopper.py:45
+[12:41:50] INFO     Searching in unc                                                                              shop_hopper.py:45
+           INFO     Searching in skylots                                                                          shop_hopper.py:45
+[12:41:51] INFO     Searching in newauction                                                                       shop_hopper.py:45
+[12:41:52] INFO     Searching in promua                                                                           shop_hopper.py:45
+Traceback (most recent call last):
+  File "/home/paalso/.local/bin/shop-hopper", line 7, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/home/paalso/.local/share/pipx/venvs/shop-hopper/lib/python3.12/site-packages/shop_hopper/scripts/app.py", line 161, in main
+    search_result, elapsed = perform_search(logger, platforms, args.request)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/paalso/.local/share/pipx/venvs/shop-hopper/lib/python3.12/site-packages/shop_hopper/scripts/app.py", line 43, in perform_search
+    search_result = shop_hopper.search(request)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/paalso/.local/share/pipx/venvs/shop-hopper/lib/python3.12/site-packages/shop_hopper/core/shop_hopper.py", line 55, in search
+    parse_result = parser_class(content, url).parse()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/paalso/.local/share/pipx/venvs/shop-hopper/lib/python3.12/site-packages/shop_hopper/parsers/base_parser.py", line 42, in parse
+    'img_url': self._get_image(offer),
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/paalso/.local/share/pipx/venvs/shop-hopper/lib/python3.12/site-packages/shop_hopper/parsers/promua_parser.py", line 43, in _get_image
+    image_url = image_element.get('src')
+                ^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'get'
+
