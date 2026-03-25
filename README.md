@@ -71,6 +71,8 @@ shop-hopper "чалий сто пригод барвінка" -p olx alib --json
 
 - Какая-то [аварийная ситуция осталась необработанной](https://github.com/paalso/shop_hopper/blob/master/bug_to_fix.txt) - устранить
 
+- Изменить логику формирования запросов с последовательной на асинхронную с [asyncio](https://docs.python.org/3.14/library/asyncio.html)
+
 - Добавить парсер для [shafa.ua](https://shafa.ua)
 
 - Докеризовать
